@@ -44,4 +44,9 @@ Route::middleware('auth')->group(function () {
     ->name('verification.verify');;
     Route::post('resend-otp', [\App\Http\Controllers\Auth\VerificationController::class, 'resend'])
     ->name('verification.resend');
+
+    // tenant registeration
+    Route::get('register-tenant', 
+    [\App\Http\Controllers\Tenant\TenantRegisterationController::class, 'register'])
+        ->name('tenant.register');
 });

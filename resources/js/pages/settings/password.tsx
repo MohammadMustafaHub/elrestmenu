@@ -1,6 +1,5 @@
 import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
 import InputError from '@/components/input-error';
-import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { type BreadcrumbItem } from '@/types';
 import { Transition } from '@headlessui/react';
@@ -12,10 +11,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/password';
+import { DashboardLayout } from '@/layouts/app/dashboard-layout';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Password settings',
+        title: 'إعدادات كلمة المرور',
         href: edit().url,
     },
 ];
@@ -25,14 +25,14 @@ export default function Password() {
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Password settings" />
+        <DashboardLayout>
+            <Head title="إعدادات كلمة المرور" />
 
             <SettingsLayout>
-                <div className="space-y-6">
+                <div className="space-y-6" dir="rtl">
                     <HeadingSmall
-                        title="Update password"
-                        description="Ensure your account is using a long, random password to stay secure"
+                        title="تحديث كلمة المرور"
+                        description="تأكد من أن حسابك يستخدم كلمة مرور طويلة وعشوائية للبقاء آمناً"
                     />
 
                     <Form
@@ -61,7 +61,7 @@ export default function Password() {
                             <>
                                 <div className="grid gap-2">
                                     <Label htmlFor="current_password">
-                                        Current password
+                                        كلمة المرور الحالية
                                     </Label>
 
                                     <Input
@@ -71,7 +71,7 @@ export default function Password() {
                                         type="password"
                                         className="mt-1 block w-full"
                                         autoComplete="current-password"
-                                        placeholder="Current password"
+                                        placeholder="كلمة المرور الحالية"
                                     />
 
                                     <InputError
@@ -81,7 +81,7 @@ export default function Password() {
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="password">
-                                        New password
+                                        كلمة المرور الجديدة
                                     </Label>
 
                                     <Input
@@ -91,7 +91,7 @@ export default function Password() {
                                         type="password"
                                         className="mt-1 block w-full"
                                         autoComplete="new-password"
-                                        placeholder="New password"
+                                        placeholder="كلمة المرور الجديدة"
                                     />
 
                                     <InputError message={errors.password} />
@@ -99,7 +99,7 @@ export default function Password() {
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="password_confirmation">
-                                        Confirm password
+                                        تأكيد كلمة المرور
                                     </Label>
 
                                     <Input
@@ -108,7 +108,7 @@ export default function Password() {
                                         type="password"
                                         className="mt-1 block w-full"
                                         autoComplete="new-password"
-                                        placeholder="Confirm password"
+                                        placeholder="تأكيد كلمة المرور"
                                     />
 
                                     <InputError
@@ -121,7 +121,7 @@ export default function Password() {
                                         disabled={processing}
                                         data-test="update-password-button"
                                     >
-                                        Save password
+                                        حفظ كلمة المرور
                                     </Button>
 
                                     <Transition
@@ -132,7 +132,7 @@ export default function Password() {
                                         leaveTo="opacity-0"
                                     >
                                         <p className="text-sm text-neutral-600">
-                                            Saved
+                                            تم الحفظ
                                         </p>
                                     </Transition>
                                 </div>
@@ -141,6 +141,6 @@ export default function Password() {
                     </Form>
                 </div>
             </SettingsLayout>
-        </AppLayout>
+        </DashboardLayout>
     );
 }

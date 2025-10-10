@@ -13,8 +13,8 @@ import AuthLayout from '@/layouts/auth-layout';
 export default function Register() {
     return (
         <AuthLayout
-            title="Create an account"
-            description="Enter your details below to create your account"
+            title="إنشاء حساب جديد"
+            description="أدخل بياناتك أدناه لإنشاء حسابك"
         >
             <Head title="Register" />
             <Form
@@ -27,7 +27,7 @@ export default function Register() {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">الاسم</Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -36,7 +36,7 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="الاسم الكامل"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -45,7 +45,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="phone">phone address</Label>
+                                <Label htmlFor="phone">رقم الهاتف</Label>
                                 <Input
                                     id="phone"
                                     type="phone"
@@ -53,13 +53,13 @@ export default function Register() {
                                     tabIndex={2}
                                     autoComplete="phone"
                                     name="phone"
-                                    placeholder="phone@example.com"
+                                    placeholder="رقم الهاتف"
                                 />
                                 <InputError message={errors.phone} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password">كلمة المرور</Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -67,14 +67,14 @@ export default function Register() {
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="كلمة المرور"
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                    تأكيد كلمة المرور
                                 </Label>
                                 <Input
                                     id="password_confirmation"
@@ -83,7 +83,7 @@ export default function Register() {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
+                                    placeholder="تأكيد كلمة المرور"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -99,14 +99,14 @@ export default function Register() {
                                 {processing && (
                                     <LoaderCircle className="h-4 w-4 animate-spin" />
                                 )}
-                                Create account
+                                إنشاء الحساب
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
+                            لديك حساب بالفعل؟{' '}
                             <TextLink href={login()} tabIndex={6}>
-                                Log in
+                                تسجيل الدخول
                             </TextLink>
                         </div>
                     </>

@@ -38,7 +38,7 @@ class VerificationController extends Controller
 
         $code = VerificationCode::query()->where('phone', auth()->user()->phone)->firstOrFail();
         if(Carbon::parse($code->expires_at) < Carbon::now() || $code->code !== $request->code)
-            return back()->withErrors(['code' => 'invalid code']);
+            return back()->withErrors(['code' => 'رمز التحقق غير صحيح او منتهي الصلاحية']);
 
         auth()->user()->update(['phone_verified_at' => Carbon::now()]);
         return redirect()->intended(route('dashboard', absolute: false));

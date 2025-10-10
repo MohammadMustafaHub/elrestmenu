@@ -39,21 +39,21 @@ class AuthenticatedSessionController extends Controller
             'password' => 'string|required',
         ]);
 
-        $user = User::query()->where('phone', $validated['phone'])->firstOrFail();
+        $user = User::query()->where('phone', $validated['phone'])->first();
         if($user == null)
         {
-            return back()->withErrors(['phone' => 'invalid phone or password']);
+            return back()->withErrors(['phone' => 'رقم الهاتف أو كلمة المرور غير صحيحة']);
         }
 
         if(Carbon::parse($user->locked_until) > Carbon::now())
         {
-            return back()->withErrors(['phone' => 'your account is locked please try again later ']);
+            return back()->withErrors(['phone' => 'حسابك مقفل مؤقتا , الرجاء المحاولة لاحقا']);
         }
 
         if(!Hash::check($validated['password'], $user->password))
         {
             $user->IncrementLoginFailedAttempts();
-            return back()->withErrors(['phone' => 'invalid phone or password']);
+            return back()->withErrors(['phone' => 'رقم الهاتف أو كلمة المرور غير صحيحة']);
         }
 
         Auth::login($user, $request->boolean('remember'));

@@ -19,8 +19,8 @@ interface LoginProps {
 export default function Login({ status, canResetPassword }: LoginProps) {
     return (
         <AuthLayout
-            title="Log in to your account"
-            description="Enter your phone and password below to log in"
+            title="تسجيل الدخول إلى حسابك"
+            description="أدخل رقم الهاتف وكلمة المرور أدناه لتسجيل الدخول"
         >
             <Head title="Log in" />
 
@@ -33,7 +33,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="phone">phone address</Label>
+                                <Label htmlFor="phone">رقم الهاتف</Label>
                                 <Input
                                     id="phone"
                                     type="phone"
@@ -42,21 +42,21 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="phone"
-                                    placeholder="phone@example.com"
+                                    placeholder="رقم الهاتف"
                                 />
                                 <InputError message={errors.phone} />
                             </div>
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label htmlFor="password">كلمة المرور</Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
                                             className="ml-auto text-sm"
                                             tabIndex={5}
                                         >
-                                            Forgot password?
+                                            نسيت كلمة المرور؟
                                         </TextLink>
                                     )}
                                 </div>
@@ -67,7 +67,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="كلمة المرور"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -78,7 +78,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember">تذكرني</Label>
                             </div>
 
                             <Button
@@ -91,14 +91,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 {processing && (
                                     <LoaderCircle className="h-4 w-4 animate-spin" />
                                 )}
-                                Log in
+                                تسجيل الدخول
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
+                            ليس لديك حساب؟{' '}
                             <TextLink href={register()} tabIndex={5}>
-                                Sign up
+                                اشترك الآن
                             </TextLink>
                         </div>
                     </>
