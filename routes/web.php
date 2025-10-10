@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\MustBeVerifiedMiddleware;
+use App\Http\Middleware\MustHaveTenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -8,7 +9,8 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth', MustBeVerifiedMiddleware::class])->group(function () {
+Route::middleware(['auth', MustBeVerifiedMiddleware::class, MustHaveTenantMiddleware::class])
+    ->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');

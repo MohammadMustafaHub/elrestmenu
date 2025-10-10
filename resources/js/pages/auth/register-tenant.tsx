@@ -7,8 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
-// Import your tenant registration controller
-// import TenantRegistrationController from '@/actions/App/Http/Controllers/Auth/TenantRegistrationController';
+import TenantRegistrationController from '@/actions/App/Http/Controllers/Tenant/TenantRegistrationController';
 
 export default function RegisterTenant() {
     return (
@@ -18,28 +17,26 @@ export default function RegisterTenant() {
         >
             <Head title="Register Tenant" />
             <Form
-                // {...TenantRegistrationController.store()}
-                method="post"
-                action="/register-tenant"
+                {...TenantRegistrationController.store()}
                 disableWhileProcessing
                 className="flex flex-col gap-6"
             >
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="tenant_name">اسم المطعم</Label>
+                            <div>
+                                <Label htmlFor="name">اسم المطعم</Label>
                                 <div className="flex" dir='ltr'>
                                     <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                                         https://
                                     </span>
                                     <Input
-                                        id="tenant_name"
+                                        id="name"
                                         type="text"
                                         required
                                         autoFocus
                                         tabIndex={1}
-                                        name="tenant_name"
+                                        name="name"
                                         placeholder="اسم-المطعم"
                                         className="rounded-l-none"
                                     />
@@ -48,15 +45,16 @@ export default function RegisterTenant() {
                                     </span>
                                 </div>
                                 <InputError
-                                    message={errors.tenant_name}
+                                    message={errors.name}
                                     className="mt-2"
                                 />
                                 <p className="text-xs text-muted-foreground flex flex-col">
                                     سيكون رابط مطعمك:
                                     <span dir='ltr' className='text-right'>https://اسم-المطعم.elrestmenu.com</span>
                                 </p>
-                            </div>
 
+
+                            </div>
                             <Button
                                 type="submit"
                                 className="mt-2 w-full"
