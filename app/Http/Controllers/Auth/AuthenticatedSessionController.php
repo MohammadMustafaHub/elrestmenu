@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -28,17 +31,29 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $user = $request->validateCredentials();
 
-        if (Features::enabled(Features::twoFactorAuthentication()) && $user->hasEnabledTwoFactorAuthentication()) {
-            $request->session()->put([
-                'login.id' => $user->getKey(),
-                'login.remember' => $request->boolean('remember'),
-            ]);
+        $validated = $request->validate([
+            'phone' => 'required|string|regex:/^9647\d{9}$/',
+            'password' => 'string|required',
+        ]);
 
-            return to_route('two-factor.login');
+        $user = User::query()->where('phone', $validated['phone'])->firstOrFail();
+        if($user == null)
+        {
+            return back()->withErrors(['phone' => 'invalid phone or password']);
+        }
+
+        if(Carbon::parse($user->locked_until) > Carbon::now())
+        {
+            return back()->withErrors(['phone' => 'your account is locked please try again later ']);
+        }
+
+        if(!Hash::check($validated['password'], $user->password))
+        {
+            $user->IncrementLoginFailedAttempts();
+            return back()->withErrors(['phone' => 'invalid phone or password']);
         }
 
         Auth::login($user, $request->boolean('remember'));
