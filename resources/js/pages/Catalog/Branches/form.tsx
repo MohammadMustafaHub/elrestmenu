@@ -37,7 +37,7 @@ export default function BranchesForm({ branch }: FormPageProps) {
 
             <div className="space-y-6" dir="rtl">
                 <div className="flex items-center gap-4">
-                    <Link href="/branches">
+                    <Link href="/dashboard/branches">
                         <Button variant="outline" size="icon">
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
@@ -64,7 +64,7 @@ export default function BranchesForm({ branch }: FormPageProps) {
                     <CardContent>
                         <Form
                             method={isEdit ? 'put' : 'post'}
-                            action={isEdit ? `/branches/${branch.id}` : '/branches'}
+                            action={isEdit ? `/dashboard/branches/${branch.id}` : '/dashboard/branches'}
                             className="space-y-6"
                             transform={(data) => {
                                 return {
@@ -192,7 +192,7 @@ export default function BranchesForm({ branch }: FormPageProps) {
                                                   ? 'تحديث الفرع'
                                                   : 'إضافة الفرع'}
                                         </Button>
-                                        <Link href="/branches">
+                                        <Link href="/dashboard/branches">
                                             <Button
                                                 variant="outline"
                                                 type="button"

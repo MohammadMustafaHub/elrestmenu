@@ -22,7 +22,7 @@ class CategoriesController extends Controller
     {
         if(auth()->user()->Tenant->checkCategoriesLimit())
         {
-            return redirect()->intended(route('branches.index', absolute: false))
+            return redirect()->intended(route('categories.index', absolute: false))
                 ->withErrors([
                     'limitError' => true
                 ]);
@@ -45,7 +45,7 @@ class CategoriesController extends Controller
         if(auth()->user()->Tenant->checkCategoriesLimit())
         {
 
-            return redirect()->intended(route('branches.index', absolute: false))
+            return redirect()->intended(route('categories.index', absolute: false))
                 ->withErrors([
                     'limitError' => true
                 ]);

@@ -24,10 +24,7 @@ class ProductsController extends Controller
     {
         if(auth()->user()->Tenant->checkProductsLimit())
         {
-            Inertia::share([
-                "limitError" => true
-            ]);
-            return redirect()->intended(route('branches.index', absolute: false))
+            return redirect()->intended(route('products.index', absolute: false))
                 ->withErrors([
                     'limitError' => true
                 ]);
@@ -74,6 +71,14 @@ class ProductsController extends Controller
             'branches_unavailable' => 'nullable|array',
         ]);
 
+        if(auth()->user()->Tenant->checkProductsLimit())
+        {
+            return redirect()->intended(route('products.index', absolute: false))
+                ->withErrors([
+                    'limitError' => true
+                ]);
+        }
+
         $branches = Branch::all();
         // validate if branches are available if not return bad request
         if (isset($validated['branches_unavailable'])) {
@@ -82,18 +87,6 @@ class ProductsController extends Controller
                     return redirect()->back()->withErrors(['branches_unavailable' => 'One or more selected branches are invalid.'])->withInput();
                 }
             }
-        }
-
-
-        if(auth()->user()->Tenant->checkProductsLimit())
-        {
-            Inertia::share([
-                "limitError" => true
-            ]);
-            return redirect()->intended(route('branches.index', absolute: false))
-                ->withErrors([
-                    'limitError' => true
-                ]);
         }
 
 

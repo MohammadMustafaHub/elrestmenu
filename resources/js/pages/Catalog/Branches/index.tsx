@@ -50,20 +50,16 @@ interface Branch {
     updated_at: string;
 }
 
-export default function Branches({ data, limitError }: { data: Branch[], limitError: boolean }) {
+export default function Branches({ data }: { data: Branch[], limitError: boolean }) {
     const handleDelete = (id: number) => {
-        router.delete(`/branches/${id}`, {
+        router.delete(`/dashboard/branches/${id}`, {
             preserveScroll: true,
         });
     };
 
-    const [isLimitModalOpen, setIsLimitModalOpen] = useState(limitError);
-
     return (
         <DashboardLayout>
             <Head title="الفروع" />
-
-            {limitError && (<LimitModal isOpen={isLimitModalOpen} onClose={() => setIsLimitModalOpen(false)}  limit={1}/>)}
 
             <div className="space-y-6" dir="rtl">
                 <div className="flex items-center justify-between">
@@ -73,7 +69,7 @@ export default function Branches({ data, limitError }: { data: Branch[], limitEr
                             إدارة فروع المطعم وتحديث معلوماتها
                         </p>
                     </div>
-                    <Link href="/branches/create">
+                    <Link href="/dashboard/branches/create">
                         <Button>
                             <Plus className="h-4 w-4 ml-2" />
                             إضافة فرع جديد
@@ -94,7 +90,7 @@ export default function Branches({ data, limitError }: { data: Branch[], limitEr
                                 <div className="text-muted-foreground">
                                     لا توجد فروع حالياً
                                 </div>
-                                <Link href="/branches/create" className="mt-4 inline-block">
+                                <Link href="/dashboard/branches/create" className="mt-4 inline-block">
                                     <Button>
                                         <Plus className="h-4 w-4 ml-2" />
                                         إضافة أول فرع

@@ -52,7 +52,7 @@ interface PaginatedData {
 
 export default function Categories({ data }: { data: PaginatedData }) {
     const handleDelete = (id: number) => {
-        router.delete(`/categories/${id}`, {
+        router.delete(`/dashboard/categories/${id}`, {
             preserveScroll: true,
         });
     };
@@ -60,7 +60,7 @@ export default function Categories({ data }: { data: PaginatedData }) {
     return (
         <DashboardLayout>
             <Head title="الفئات" />
-            
+
             <div className="space-y-6" dir="rtl">
                 <div className="flex items-center justify-between">
                     <div>
@@ -72,7 +72,7 @@ export default function Categories({ data }: { data: PaginatedData }) {
                             إدارة فئات المنتجات وتنظيم القائمة
                         </p>
                     </div>
-                    <Link href="/categories/create">
+                    <Link href="/dashboard/categories/create">
                         <Button>
                             <Plus className="h-4 w-4 ml-2" />
                             إضافة فئة جديدة
@@ -93,7 +93,7 @@ export default function Categories({ data }: { data: PaginatedData }) {
                                 <div className="text-muted-foreground">
                                     لا توجد فئات حالياً
                                 </div>
-                                <Link href="/categories/create" className="mt-4 inline-block">
+                                <Link href="/dashboard/categories/create" className="mt-4 inline-block">
                                     <Button>
                                         <Plus className="h-4 w-4 ml-2" />
                                         إضافة أول فئة
@@ -132,7 +132,7 @@ export default function Categories({ data }: { data: PaginatedData }) {
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
                                                             <DropdownMenuItem asChild>
-                                                                <Link href={`/categories/edit/${category.id}`}>
+                                                                <Link href={`/dashboard/categories/edit/${category.id}`}>
                                                                     <Edit className="h-4 w-4 ml-2" />
                                                                     تعديل
                                                                 </Link>
@@ -148,7 +148,7 @@ export default function Categories({ data }: { data: PaginatedData }) {
                                                                     <AlertDialogHeader>
                                                                         <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
                                                                         <AlertDialogDescription>
-                                                                            هل أنت متأكد من حذف فئة "{category.name}"؟ 
+                                                                            هل أنت متأكد من حذف فئة "{category.name}"؟
                                                                             هذا الإجراء لا يمكن التراجع عنه.
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
@@ -172,7 +172,7 @@ export default function Categories({ data }: { data: PaginatedData }) {
                                 </TableBody>
                             </Table>
                         )}
-                        
+
                         {/* Pagination */}
                         {data.last_page > 1 && (
                             <div className="flex items-center justify-between px-2 py-4">
@@ -181,14 +181,14 @@ export default function Categories({ data }: { data: PaginatedData }) {
                                 </div>
                                 <div className="flex items-center space-x-2 space-x-reverse">
                                     {data.current_page > 1 && (
-                                        <Link href={`/categories?page=${data.current_page - 1}`}>
+                                        <Link href={`/dashboard/categories?page=${data.current_page - 1}`}>
                                             <Button variant="outline" size="sm">
                                                 السابق
                                             </Button>
                                         </Link>
                                     )}
                                     {data.current_page < data.last_page && (
-                                        <Link href={`/categories?page=${data.current_page + 1}`}>
+                                        <Link href={`/dashboard/categories?page=${data.current_page + 1}`}>
                                             <Button variant="outline" size="sm">
                                                 التالي
                                             </Button>

@@ -31,7 +31,7 @@ export default function CategoriesForm({ data }: FormPageProps) {
 
             <div className="space-y-6" dir="rtl">
                 <div className="flex items-center gap-4">
-                    <Link href="/categories">
+                    <Link href="/dashboard/categories">
                         <Button variant="outline" size="icon">
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
@@ -59,7 +59,7 @@ export default function CategoriesForm({ data }: FormPageProps) {
                     <CardContent>
                         <Form
                             method={isEdit ? 'put' : 'post'}
-                            action={isEdit ? `/categories/${data.id}` : '/categories'}
+                            action={isEdit ? `/dashboard/categories/${data.id}` : '/dashboard/categories'}
                             className="space-y-6"
                         >
                             {({ processing, errors }) => (
@@ -107,7 +107,7 @@ export default function CategoriesForm({ data }: FormPageProps) {
                                                   ? 'تحديث الفئة'
                                                   : 'إضافة الفئة'}
                                         </Button>
-                                        <Link href="/categories">
+                                        <Link href="/dashboard/categories">
                                             <Button
                                                 variant="outline"
                                                 type="button"

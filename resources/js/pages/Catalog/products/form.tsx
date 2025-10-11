@@ -162,7 +162,7 @@ export default function ProductsForm({
 
             <div className="space-y-6" dir="rtl">
                 <div className="flex items-center gap-4">
-                    <Link href="/products">
+                    <Link href="/dashboard/products">
                         <Button variant="outline" size="icon">
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
@@ -182,7 +182,7 @@ export default function ProductsForm({
 
                 <Form
                     method={isEdit ? 'put' : 'post'}
-                    action={isEdit ? `/products/${data.id}` : '/products'}
+                    action={isEdit ? `/dashboard/products/${data.id}` : '/dashboard/products'}
                     transform={(formData) => {
                         const price = Number(formData.price);
                         const discountedPrice = Number(
@@ -666,7 +666,7 @@ export default function ProductsForm({
                                                   ? 'تحديث المنتج'
                                                   : 'إضافة المنتج'}
                                         </Button>
-                                        <Link href="/products">
+                                        <Link href="/dashboard/products">
                                             <Button
                                                 variant="outline"
                                                 type="button"

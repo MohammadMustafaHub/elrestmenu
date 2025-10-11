@@ -71,7 +71,7 @@ interface PaginatedData {
 
 export default function Products({ data }: { data: PaginatedData }) {
     const handleDelete = (id: number) => {
-        router.delete(`/products/${id}`, {
+        router.delete(`/dashboard/products/${id}`, {
             preserveScroll: true,
         });
     };
@@ -87,7 +87,7 @@ export default function Products({ data }: { data: PaginatedData }) {
     return (
         <DashboardLayout>
             <Head title="المنتجات" />
-            
+
             <div className="space-y-6" dir="rtl">
                 <div className="flex items-center justify-between">
                     <div>
@@ -99,7 +99,7 @@ export default function Products({ data }: { data: PaginatedData }) {
                             إدارة منتجات المطعم وتحديث أسعارها ومعلوماتها
                         </p>
                     </div>
-                    <Link href="/products/create">
+                    <Link href="/dashboard/products/create">
                         <Button>
                             <Plus className="h-4 w-4 ml-2" />
                             إضافة منتج جديد
@@ -120,7 +120,7 @@ export default function Products({ data }: { data: PaginatedData }) {
                                 <div className="text-muted-foreground">
                                     لا توجد منتجات حالياً
                                 </div>
-                                <Link href="/products/create" className="mt-4 inline-block">
+                                <Link href="/dashboard/products/create" className="mt-4 inline-block">
                                     <Button>
                                         <Plus className="h-4 w-4 ml-2" />
                                         إضافة أول منتج
@@ -199,7 +199,7 @@ export default function Products({ data }: { data: PaginatedData }) {
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
                                                             <DropdownMenuItem asChild>
-                                                                <Link href={`/products/edit/${product.id}`}>
+                                                                <Link href={`/dashboard/products/edit/${product.id}`}>
                                                                     <Edit className="h-4 w-4 ml-2" />
                                                                     تعديل
                                                                 </Link>
@@ -215,7 +215,7 @@ export default function Products({ data }: { data: PaginatedData }) {
                                                                     <AlertDialogHeader>
                                                                         <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
                                                                         <AlertDialogDescription>
-                                                                            هل أنت متأكد من حذف منتج "{product.name}"؟ 
+                                                                            هل أنت متأكد من حذف منتج "{product.name}"؟
                                                                             هذا الإجراء لا يمكن التراجع عنه.
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
@@ -239,7 +239,7 @@ export default function Products({ data }: { data: PaginatedData }) {
                                 </TableBody>
                             </Table>
                         )}
-                        
+
                         {/* Pagination */}
                         {data.last_page > 1 && (
                             <div className="flex items-center justify-between px-2 py-4">
@@ -248,14 +248,14 @@ export default function Products({ data }: { data: PaginatedData }) {
                                 </div>
                                 <div className="flex items-center space-x-2 space-x-reverse">
                                     {data.current_page > 1 && (
-                                        <Link href={`/products?page=${data.current_page - 1}`}>
+                                        <Link href={`/dashboard/products?page=${data.current_page - 1}`}>
                                             <Button variant="outline" size="sm">
                                                 السابق
                                             </Button>
                                         </Link>
                                     )}
                                     {data.current_page < data.last_page && (
-                                        <Link href={`/products?page=${data.current_page + 1}`}>
+                                        <Link href={`/dashboard/products?page=${data.current_page + 1}`}>
                                             <Button variant="outline" size="sm">
                                                 التالي
                                             </Button>
