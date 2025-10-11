@@ -17,8 +17,9 @@ Route::get('/', function () {
 Route::middleware(['auth', RootDomainAccessMiddleware::class,
     MustBeVerifiedMiddleware::class,
     MustHaveTenantMiddleware::class])
+    ->prefix('dashboard')
     ->group(function () {
-    Route::get('dashboard', function () {
+    Route::get('/', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
@@ -85,6 +86,9 @@ Route::middleware(['auth', RootDomainAccessMiddleware::class,
 
     Route::post('delivery', [TenantSettingsController::class, 'updateDeliverySettings'])
         ->name('tenant.delivery.settings');
+
+    Route::get('subscription', [TenantSettingsController::class, 'subscription'])
+        ->name('tenant.subscription');
 
 });
 

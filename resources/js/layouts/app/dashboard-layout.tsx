@@ -48,7 +48,7 @@ import { useState } from 'react';
 const navigation = [
   {
     name: "لوحة التحكم",
-    href: "/",
+    href: "/dashboard",
     icon: LayoutDashboard,
     group: null,
   },
@@ -56,27 +56,27 @@ const navigation = [
     name: "القائمة",
     group: "menu",
     items: [
-      { name: "المنتجات", href: "/products", icon: Package },
-      { name: "الفئات", href: "/categories", icon: Tags },
+      { name: "المنتجات", href: "/dashboard/products", icon: Package },
+      { name: "الفئات", href: "/dashboard/categories", icon: Tags },
     ],
   },
   {
     name: "الإدارة",
     group: "management",
     items: [
-      { name: "الفروع", href: "/branches", icon: Building2 },
+      { name: "الفروع", href: "/dashboard/branches", icon: Building2 },
       {
         name: "اعدادات التوصيل",
-        href: "/delivery",
+        href: "/dashboard/delivery",
         icon: CarTaxiFront,
       },
-      { name: "إعدادات المطعم", href: "/settings", icon: Settings },
+      { name: "إعدادات المطعم", href: "/dashboard/settings", icon: Settings },
     ],
   },
   {
     name: "الاشتراك",
     group: "subscription",
-    items: [{ name: "الاشتراك", href: "/subscription", icon: Tags }],
+    items: [{ name: "الاشتراك", href: "/dashboard/subscription", icon: Tags }],
   },
 ];
 

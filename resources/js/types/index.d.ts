@@ -51,10 +51,16 @@ export interface Tenant {
     created_at: string;
     updated_at: string;
     limits: TenantLimits;
-
+    usage: TenantUsage;
 }
 
 export interface TenantLimits {
+    products: number;
+    categories: number;
+    branches: number;
+}
+
+export interface TenantUsage {
     products: number;
     categories: number;
     branches: number;

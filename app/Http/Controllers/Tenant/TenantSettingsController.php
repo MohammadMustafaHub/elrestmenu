@@ -91,6 +91,11 @@ class TenantSettingsController extends Controller
 
     }
 
+    public function subscription()
+    {
+        $tenant = auth()->user()->Tenant;
+        return Inertia::render('tenant/subscription');
+    }
 
 }
 
