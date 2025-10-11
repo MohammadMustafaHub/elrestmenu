@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
 
-class HandleAppearance
+class RootDomainAccessMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +15,9 @@ class HandleAppearance
      */
     public function handle(Request $request, Closure $next): Response
     {
-        View::share('appearance', $request->cookie('appearance') ?? 'light');
+        if ($request->getHost() !== config('tenancy.root_domain') || $request->getHost() === 'www.' . config('tenancy.root_domain')) {
+            abort(404);
+        }
 
         return $next($request);
     }

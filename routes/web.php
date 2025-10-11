@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Catalog\BranchesController;
+use App\Http\Controllers\Catalog\CategoriesController;
+use App\Http\Controllers\Catalog\ProductsController;
 use App\Http\Controllers\Tenant\TenantSettingsController;
 use App\Http\Middleware\MustBeVerifiedMiddleware;
 use App\Http\Middleware\MustHaveTenantMiddleware;
+use App\Http\Middleware\RootDomainAccessMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -11,7 +14,9 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth', MustBeVerifiedMiddleware::class, MustHaveTenantMiddleware::class])
+Route::middleware(['auth', RootDomainAccessMiddleware::class,
+    MustBeVerifiedMiddleware::class,
+    MustHaveTenantMiddleware::class])
     ->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
@@ -35,7 +40,41 @@ Route::middleware(['auth', MustBeVerifiedMiddleware::class, MustHaveTenantMiddle
         ->name('branches.destroy');
 
 
-    Route::get('settings', [TenantSettingsController::class, 'index'])
+        Route::get('categories', [CategoriesController::class, 'index'])
+            ->name('categories.index');
+        Route::get('categories/create', [CategoriesController::class, 'create'])
+            ->name('categories.create');
+        Route::get('categories/edit/{id}', [CategoriesController::class, 'edit'])
+            ->name('categories.edit');
+
+        Route::post('categories', [CategoriesController::class, 'store'])
+            ->name('categories.store');
+
+        Route::put('categories/{id}', [CategoriesController::class, 'update'])
+            ->name('categories.update');
+
+        Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])
+            ->name('categories.destroy');
+
+
+        Route::get('products', [ProductsController::class, 'index'])
+            ->name('products.index');
+        Route::get('products/create', [ProductsController::class, 'create'])
+            ->name('products.create');
+        Route::get('products/edit/{id}', [ProductsController::class, 'edit'])
+            ->name('products.edit');
+
+        Route::post('products', [ProductsController::class, 'store'])
+            ->name('products.store');
+
+        Route::put('products/{id}', [ProductsController::class, 'update'])
+            ->name('products.update');
+
+        Route::delete('products/{id}', [ProductsController::class, 'destroy'])
+            ->name('products.destroy');
+
+
+        Route::get('settings', [TenantSettingsController::class, 'index'])
         ->name('tenant.settings');
 
     Route::post('settings', [TenantSettingsController::class, 'updateUiSettings'])
