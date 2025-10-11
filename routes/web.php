@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Catalog\BranchesController;
+use App\Http\Controllers\Tenant\TenantSettingsController;
 use App\Http\Middleware\MustBeVerifiedMiddleware;
 use App\Http\Middleware\MustHaveTenantMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -26,12 +27,25 @@ Route::middleware(['auth', MustBeVerifiedMiddleware::class, MustHaveTenantMiddle
 
     Route::post('branches', [BranchesController::class, 'store'])
         ->name('branches.store');
-    
+
     Route::put('branches/{id}', [BranchesController::class, 'update'])
     ->name('branches.update');
 
     Route::delete('branches/{id}', [BranchesController::class, 'destroy'])
         ->name('branches.destroy');
+
+
+    Route::get('settings', [TenantSettingsController::class, 'index'])
+        ->name('tenant.settings');
+
+    Route::post('settings', [TenantSettingsController::class, 'updateUiSettings'])
+        ->name('tenant.settings.ui');
+
+    Route::get('delivery', [TenantSettingsController::class, 'getDeliverySettings'])
+        ->name('tenant.delivery.settings');
+
+    Route::post('delivery', [TenantSettingsController::class, 'updateDeliverySettings'])
+        ->name('tenant.delivery.settings');
 
 });
 

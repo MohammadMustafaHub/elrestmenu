@@ -35,11 +35,11 @@ class TenantRegistrationController extends Controller
         }
 
         DB::transaction(function () use ($validated) {
-            $t = Tenant::create([
-                'name' => strtolower($validated['name']),
-                'subscription' => Subscription::Free,
-                'subscription_ends_at' => now()->addDays(5),
-            ]);
+            $t = new Tenant();
+            $t->name = $validated['name'];
+            $t->subscription = Subscription::Free;
+            $t->subscripe(Subscription::Free);
+            $t->save();
 
             auth()->user()->update(['tenant_id' => $t->id]);
         });

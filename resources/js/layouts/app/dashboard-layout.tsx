@@ -63,7 +63,7 @@ const navigation = [
       { name: "الفروع", href: "/branches", icon: Building2 },
       {
         name: "اعدادات التوصيل",
-        href: "/delivery-settings",
+        href: "/delivery",
         icon: CarTaxiFront,
       },
       { name: "إعدادات المطعم", href: "/settings", icon: Settings },
