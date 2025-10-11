@@ -8,7 +8,7 @@ use App\Http\Middleware\MustHaveTenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-//Route::middleware(['auth', MustBeVerifiedMiddleware::class, MustHaveTenantMiddleware::class])->group(function () {
+Route::middleware(['auth', MustBeVerifiedMiddleware::class, MustHaveTenantMiddleware::class])->group(function () {
 //    Route::redirect('settings', '/settings/profile');
 //
 //    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -20,9 +20,9 @@ use Inertia\Inertia;
 //    Route::put('settings/password', [PasswordController::class, 'update'])
 //        ->middleware('throttle:6,1')
 //        ->name('password.update');
-//
-//    Route::get('settings/appearance', function () {
-//        return Inertia::render('settings/appearance');
-//    })->name('appearance.edit');
-//
-//});
+
+    Route::get('settings/appearance', function () {
+        return Inertia::render('settings/appearance');
+    })->name('appearance.edit');
+
+});
