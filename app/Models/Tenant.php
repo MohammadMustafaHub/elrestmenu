@@ -15,7 +15,8 @@ class Tenant extends Model
         'subscription_ends_at',
         'settings',
         'delivery_settings',
-        'limits'
+        'limits',
+        'usage'
     ];
 
     protected $casts = [
@@ -24,6 +25,7 @@ class Tenant extends Model
         'settings' => 'array',
         'delivery_settings' => 'array',
         'limits' => 'array',
+        'usage' => 'array',
     ];
 
     public static function isReservedName(string $name){
@@ -67,10 +69,69 @@ class Tenant extends Model
         $this->settings = $tenantSettings->toArray();
     }
 
+    public function setTenantUsage(TenantUsage $usage)
+    {
+        $this->usage = $usage->toArray();
+    }
+
+    public function checkBranchesLimit(): bool
+    {
+        $limits = $this->limits ?? [];
+        $usage = $this->usage ?? [];
+
+        $branchesLimit = $limits['branches'] ?? 0;
+        $branchesUsage = $usage['branches'] ?? 0;
+
+        return $branchesUsage >= $branchesLimit;
+    }
+
+    public function checkProductsLimit(): bool
+    {
+        $limits = $this->limits ?? [];
+        $usage = $this->usage ?? [];
+
+        $productsLimit = $limits['products'] ?? 0;
+        $productsUsage = $usage['products'] ?? 0;
+
+        return $productsUsage >= $productsLimit;
+    }
+
+    public function checkCategoriesLimit(): bool
+    {
+        $limits = $this->limits ?? [];
+        $usage = $this->usage ?? [];
+
+        $categoriesLimit = $limits['categories'] ?? 0;
+        $categoriesUsage = $usage['categories'] ?? 0;
+
+        return $categoriesUsage >= $categoriesLimit;
+    }
+
 }
 
 
+class TenantUsage
+{
+    public int $products;
+    public int $categories;
+    public int $branches;
 
+    public function __construct(int $products = 0, int $categories = 0, int $branches = 0)
+    {
+        $this->products = $products;
+        $this->categories = $categories;
+        $this->branches = $branches;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'products' => $this->products,
+            'categories' => $this->categories,
+            'branches' => $this->branches,
+        ];
+    }
+}
 
 
 

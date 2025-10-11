@@ -7,6 +7,8 @@ use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class ProductsController extends Controller
 {
@@ -20,9 +22,20 @@ class ProductsController extends Controller
 
     public function create()
     {
+        if(auth()->user()->Tenant->checkProductsLimit())
+        {
+            Inertia::share([
+                "limitError" => true
+            ]);
+            return redirect()->intended(route('branches.index', absolute: false))
+                ->withErrors([
+                    'limitError' => true
+                ]);
+        }
+
         $categories = Category::all();
         $branches = Branch::all();
-        
+
         return inertia('Catalog/products/form', [
             'categories' => $categories,
             'branches' => $branches,
@@ -34,7 +47,7 @@ class ProductsController extends Controller
         $product = Product::query()->with('category')->findOrFail($id);
         $categories = Category::all();
         $branches = Branch::all();
-        
+
         return inertia('Catalog/products/form', [
             'data' => $product,
             'categories' => $categories,
@@ -72,18 +85,37 @@ class ProductsController extends Controller
         }
 
 
-        $product = Product::query()->create([
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'discounted_price' => $validated['discounted_price'],
-            'image' => $validated['image']->store('products', 'public'),
-            'is_active' => $validated['is_active'],
-            'addons' => $validated['addons'] ?? [],
-            'options' => $validated['options'] ?? [],
-            'category_id' => $validated['category_id'],
-            'branches_unavailable' => $validated['branches_unavailable'] ?? [],
-        ]);
+        if(auth()->user()->Tenant->checkProductsLimit())
+        {
+            Inertia::share([
+                "limitError" => true
+            ]);
+            return redirect()->intended(route('branches.index', absolute: false))
+                ->withErrors([
+                    'limitError' => true
+                ]);
+        }
+
+
+        DB::transaction(function () use ($validated) {
+            $tenant = auth()->user()->Tenant;
+            $usage = $tenant->usage ?? [];
+            $usage['products'] = ($usage['products'] ?? 0) + 1;
+            $tenant->usage = $usage;
+            $tenant->save();
+            $product = Product::query()->create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'price' => $validated['price'],
+                'discounted_price' => $validated['discounted_price'],
+                'image' => $validated['image']->store('products', 'public'),
+                'is_active' => $validated['is_active'],
+                'addons' => $validated['addons'] ?? [],
+                'options' => $validated['options'] ?? [],
+                'category_id' => $validated['category_id'],
+                'branches_unavailable' => $validated['branches_unavailable'] ?? [],
+            ]);
+        });
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
@@ -130,7 +162,16 @@ class ProductsController extends Controller
     public function destroy(string $id)
     {
         $product = Product::query()->findOrFail($id);
-        $product->delete();
+
+        DB::transaction(function () use ($product) {
+            $tenant = auth()->user()->Tenant;
+            $usage = $tenant->usage ?? [];
+            $usage['products'] = max(0, ($usage['products'] ?? 1) - 1);
+            $tenant->usage = $usage;
+            $tenant->save();
+            $product->delete();
+        });
+
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }

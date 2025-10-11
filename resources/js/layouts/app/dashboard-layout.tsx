@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -38,8 +37,13 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from '@inertiajs/react';
 import { useAppearance } from "@/hooks/use-appearance";
+import { SharedData } from '@/types';
+import AuthenticatedSessionController from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
+import QrGenerator from '@/components/qr-generator';
+import LimitModal from '@/components/limit-modal';
+import { useState } from 'react';
 
 const navigation = [
   {
@@ -79,28 +83,27 @@ const navigation = [
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { url } = usePage();
   const pathname = url;
+  const { tenant, auth, errors } = usePage<SharedData>().props
+  const [limitModal, setLimitModalOpen] = useState(errors['limitError'] ? true : false);
 
-  const restaurantUrl = `$t1.elrestmenu.com`
+  const restaurantUrl = `${tenant.name}.elrestmenu.com`
   const theme = useAppearance();
+
+
+  function getAvatarFallback(){
+    return auth.user.name[0].toUpperCase();
+  }
 
   const handleCopyUrl = async () => {
     try {
-      await navigator.clipboard.writeText(`https://${restaurantUrl}`);
-      // Uncomment if you have toast
-      // toast.success("تم النسخ!", {
-      //   description: "تم نسخ رابط المطعم إلى الحافظة",
-      // });
+        await navigator.clipboard.writeText(`https://${restaurantUrl}`);
     } catch (err) {
-      // toast.error("خطأ", {
-      //   description: "فشل في نسخ الرابط",
-      // });
+        console.log(err);
     }
   };
 
   async function handleLogout() {
-    // await logout();
-    // localStorage.removeItem("token");
-    // userStore.logout();
+      router.post(AuthenticatedSessionController.destroy());
   }
 
   const handleSocialShare = (platform: string) => {
@@ -319,10 +322,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <div className="flex flex-col items-center space-y-2 py-2">
                   <p className="text-sm font-medium">QR Code للمطعم</p>
                   <div className="bg-white p-2 rounded-lg shadow-sm">
-                    {/* <QrGenerator url={`https://${restaurantUrl}`} showDownload={true} /> */}
-                    <div className="w-20 h-20 bg-gray-200 flex items-center justify-center rounded">
-                      QR Code
-                    </div>
+                     <QrGenerator url={`https://${restaurantUrl}`} showDownload={true} />
+                    {/*<div className="w-20 h-20 bg-gray-200 flex items-center justify-center rounded">*/}
+                    {/*  QR Code*/}
+                    {/*</div>*/}
                   </div>
                   <p className="text-xs text-muted-foreground text-center">
                     امسح الكود للوصول للمطعم
@@ -341,18 +344,17 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               >
                 <Avatar className="h-8 w-8">
                   <AvatarImage
-                    src="/placeholder.svg?height=32&width=32"
                     alt="المستخدم"
                   />
-                  <AvatarFallback>أح</AvatarFallback>
+                  <AvatarFallback>{getAvatarFallback()}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">رقم الهاتف</p>
-                  {/* <p className="text-xs leading-none text-muted-foreground">{authStore.user?.phone}</p> */}
+                  <p className="text-sm font-medium leading-none">{auth.user.name}</p>
+                   <p className="text-xs leading-none text-muted-foreground">{auth.user.phone}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -363,6 +365,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
+        {limitModal && ( <LimitModal isOpen={limitModal} onClose={() => setLimitModalOpen(false)} />)}
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           {children}
         </main>

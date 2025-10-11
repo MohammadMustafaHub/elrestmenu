@@ -50,15 +50,15 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             <div className="grid gap-2">
                                 <div className="flex items-center">
                                     <Label htmlFor="password">كلمة المرور</Label>
-                                    {canResetPassword && (
-                                        <TextLink
-                                            href={request()}
-                                            className="ml-auto text-sm"
-                                            tabIndex={5}
-                                        >
-                                            نسيت كلمة المرور؟
-                                        </TextLink>
-                                    )}
+                                    {/*{canResetPassword && (*/}
+                                    {/*    <TextLink*/}
+                                    {/*        href={request()}*/}
+                                    {/*        className="ml-auto text-sm"*/}
+                                    {/*        tabIndex={5}*/}
+                                    {/*    >*/}
+                                    {/*        نسيت كلمة المرور؟*/}
+                                    {/*    </TextLink>*/}
+                                    {/*)}*/}
                                 </div>
                                 <Input
                                     id="password"
@@ -76,6 +76,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 <Checkbox
                                     id="remember"
                                     name="remember"
+                                    defaultChecked={true}
                                     tabIndex={3}
                                 />
                                 <Label htmlFor="remember">تذكرني</Label>

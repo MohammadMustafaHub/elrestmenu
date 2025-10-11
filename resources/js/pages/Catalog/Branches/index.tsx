@@ -36,6 +36,8 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import BranchesController from '@/actions/App/Http/Controllers/Catalog/BranchesController';
+import LimitModal from '@/components/limit-modal';
+import { useState } from 'react';
 
 interface Branch {
     id: number;
@@ -48,17 +50,21 @@ interface Branch {
     updated_at: string;
 }
 
-export default function Branches({ data }: { data: Branch[] }) {
+export default function Branches({ data, limitError }: { data: Branch[], limitError: boolean }) {
     const handleDelete = (id: number) => {
         router.delete(`/branches/${id}`, {
             preserveScroll: true,
         });
     };
 
+    const [isLimitModalOpen, setIsLimitModalOpen] = useState(limitError);
+
     return (
         <DashboardLayout>
             <Head title="الفروع" />
-            
+
+            {limitError && (<LimitModal isOpen={isLimitModalOpen} onClose={() => setIsLimitModalOpen(false)}  limit={1}/>)}
+
             <div className="space-y-6" dir="rtl">
                 <div className="flex items-center justify-between">
                     <div>
@@ -175,7 +181,7 @@ export default function Branches({ data }: { data: Branch[] }) {
                                                                 <AlertDialogHeader>
                                                                     <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
                                                                     <AlertDialogDescription>
-                                                                        هل أنت متأكد من حذف فرع "{branch.name}"؟ 
+                                                                        هل أنت متأكد من حذف فرع "{branch.name}"؟
                                                                         هذا الإجراء لا يمكن التراجع عنه.
                                                                     </AlertDialogDescription>
                                                                 </AlertDialogHeader>

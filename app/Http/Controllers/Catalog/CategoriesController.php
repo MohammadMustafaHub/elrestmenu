@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Catalog;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class CategoriesController extends Controller
@@ -19,6 +20,13 @@ class CategoriesController extends Controller
 
     public function create()
     {
+        if(auth()->user()->Tenant->checkCategoriesLimit())
+        {
+            return redirect()->intended(route('branches.index', absolute: false))
+                ->withErrors([
+                    'limitError' => true
+                ]);
+        }
         return Inertia::render('Catalog/categories/form');
     }
 
@@ -34,7 +42,29 @@ class CategoriesController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        Category::query()->create(['name' => $validated['name']]);
+        if(auth()->user()->Tenant->checkCategoriesLimit())
+        {
+
+            return redirect()->intended(route('branches.index', absolute: false))
+                ->withErrors([
+                    'limitError' => true
+                ]);
+        }
+
+        DB::transaction(function () use ($validated) {
+
+            $tenant = auth()->user()->Tenant;
+
+            $usage = $tenant->usage ?? [];
+            $usage['categories'] = ($usage['categories'] ?? 0) + 1;
+            $tenant->usage = $usage;
+            $tenant->save();
+
+            Category::create([
+                'name' => $validated['name'],
+            ]);
+        });
+
         return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
@@ -52,7 +82,18 @@ class CategoriesController extends Controller
     public function destroy(string $id)
     {
         $category = Category::query()->findOrFail($id);
-        $category->delete();
+
+        DB::transaction(function () use ($category) {
+            $tenant = auth()->user()->Tenant;
+
+            $usage = $tenant->usage ?? [];
+            $usage['categories'] = max(0, ($usage['categories'] ?? 1) - 1);
+            $tenant->usage = $usage;
+            $tenant->save();
+
+            $category->delete();
+        });
+
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }
