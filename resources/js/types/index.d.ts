@@ -27,11 +27,12 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    tenant: Tenant;
     [key: string]: unknown;
 }
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
     avatar?: string;
@@ -40,4 +41,21 @@ export interface User {
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface Tenant {
+    id: string;
+    name: string;
+    subscription?: 'free' | 'pro' | 'premium';
+    subscription_ends_at?: string | null;
+    created_at: string;
+    updated_at: string;
+    limits: TenantLimits;
+
+}
+
+export interface TenantLimits {
+    products: number;
+    categories: number;
+    branches: number;
 }

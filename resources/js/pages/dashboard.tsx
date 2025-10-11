@@ -1,18 +1,13 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import AppLayout from '@/layouts/app-layout';
 import { DashboardLayout } from '@/layouts/app/dashboard-layout';
-import { dashboard } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { type SharedData } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-];
+
 
 export default function Dashboard() {
+    const { tenant } = usePage<SharedData>().props;
+    console.log(tenant.limits);
     return (
         <DashboardLayout >
             <Head title="Dashboard" />
