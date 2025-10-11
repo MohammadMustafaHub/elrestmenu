@@ -3,6 +3,7 @@
 use App\Http\Controllers\Catalog\BranchesController;
 use App\Http\Controllers\Catalog\CategoriesController;
 use App\Http\Controllers\Catalog\ProductsController;
+use App\Http\Controllers\Management\TenantsManagementController;
 use App\Http\Controllers\Tenant\TenantSettingsController;
 use App\Http\Middleware\MustBeVerifiedMiddleware;
 use App\Http\Middleware\MustHaveTenantMiddleware;
@@ -75,8 +76,8 @@ Route::middleware(['auth', RootDomainAccessMiddleware::class,
             ->name('products.destroy');
 
 
-        Route::get('settings', [TenantSettingsController::class, 'index'])
-        ->name('tenant.settings');
+    Route::get('settings', [TenantSettingsController::class, 'index'])
+    ->name('tenant.settings');
 
     Route::post('settings', [TenantSettingsController::class, 'updateUiSettings'])
         ->name('tenant.settings.ui');
@@ -89,6 +90,12 @@ Route::middleware(['auth', RootDomainAccessMiddleware::class,
 
     Route::get('subscription', [TenantSettingsController::class, 'subscription'])
         ->name('tenant.subscription');
+
+
+    Route::get('management', [TenantsManagementController::class, 'index'])
+    ->name('tenant.management');
+    Route::post('management/upgrade/{id}', [TenantsManagementController::class, 'upgradeTenant'])
+        ->name('tenant.management.upgrade');
 
 });
 

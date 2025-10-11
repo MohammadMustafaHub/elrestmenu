@@ -27,7 +27,8 @@ class User extends Authenticatable
         'login_failed_attempts',
         'locked_until',
         'phone_verified_at',
-        'tenant_id'
+        'tenant_id',
+        'is_system_admin'
     ];
 
     /**

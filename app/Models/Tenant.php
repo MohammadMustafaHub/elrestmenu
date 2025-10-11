@@ -54,7 +54,7 @@ class Tenant extends Model
             Subscription::Pro, Subscription::Premium => Carbon::now()->addDays(365),
         };
 
-        $this->subscription = $subscription;
+        $this->subscription = $subscription->value;
         $this->subscription_ends_at = $sub_ends_at;
         $this->limits = $limits;
     }
