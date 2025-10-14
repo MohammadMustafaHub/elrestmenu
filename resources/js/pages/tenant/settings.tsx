@@ -39,7 +39,7 @@ const workingDaysOptions = [
 
 export default function TenantSettings({ settings }: SettingsPageProps) {
     const [logoPreview, setLogoPreview] = useState<string | null>(
-        settings?.logo_url ? `/storage/${settings.logo_url}` : null,
+        settings?.logo_url ? `https://images.elrestmenu.com/${settings.logo_url}` : null,
     );
     console.log('settings', settings);
 
@@ -204,7 +204,7 @@ export default function TenantSettings({ settings }: SettingsPageProps) {
                                                 </span>
                                             </Label>
                                             <Input
-                                                
+
                                                 id="working_ends"
                                                 name="working_ends"
                                                 type="time"
@@ -257,7 +257,7 @@ export default function TenantSettings({ settings }: SettingsPageProps) {
                                                 ),
                                             )}
                                         </div>
-                                        
+
                                     </div>
                                 </CardContent>
                             </Card>

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
-class ResolveTenantMiddleware
+class ResolveTenantMiddlewareFromUser
 {
     /**
      * Handle an incoming request.
@@ -24,20 +24,6 @@ class ResolveTenantMiddleware
             ]);
             return $next($request);
         }
-
-        // resolve from subdomain
-        $host = $request->getHost();
-        $subdomain = $this->getSubdomain($host);
-        if ($subdomain) {
-            $tenant = Tenant::where('name', $subdomain)->first();
-            if ($tenant) {
-                app()->instance(Tenant::class, $tenant);
-                Inertia::share([
-                    'tenant' => $tenant->makeHidden(['created_at', 'updated_at', 'subscription', 'subscription_ends_at', 'limits'])
-                ]);
-            }
-        }
-
 
         return $next($request);
     }

@@ -4,12 +4,37 @@ use App\Http\Controllers\Catalog\BranchesController;
 use App\Http\Controllers\Catalog\CategoriesController;
 use App\Http\Controllers\Catalog\ProductsController;
 use App\Http\Controllers\Management\TenantsManagementController;
+use App\Http\Controllers\Tenancy\TenantCatalogDataController;
 use App\Http\Controllers\Tenant\TenantSettingsController;
 use App\Http\Middleware\MustBeVerifiedMiddleware;
 use App\Http\Middleware\MustHaveTenantMiddleware;
+use App\Http\Middleware\ResolveTenantFromUrlMiddleware;
 use App\Http\Middleware\RootDomainAccessMiddleware;
+use App\Models\Tenant;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+
+// subdomain specific routes
+Route::middleware([ResolveTenantFromUrlMiddleware::class])
+    ->prefix("api/{tenant}")
+    ->group(function () {
+
+        Route::get('/products', function (Request $request) {
+            return app(Tenant::class)->name;
+        });
+
+        Route::get('/categories', [TenantCatalogDataController::class, 'getCategories']);
+        Route::get('/branches', [TenantCatalogDataController::class, 'getBranches']);
+        Route::get('/products', [TenantCatalogDataController::class, 'getProducts']);
+
+        Route::get('/tenant', function (Request $request) {
+            return app(Tenant::class)->except('limits', 'usage', 'subscription', 'subscription_ends_at');
+        })->name('tenant.home');
+
+    });
+
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -20,26 +45,26 @@ Route::middleware(['auth', RootDomainAccessMiddleware::class,
     MustHaveTenantMiddleware::class])
     ->prefix('dashboard')
     ->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+        Route::get('/', function () {
+            return Inertia::render('dashboard');
+        })->name('dashboard');
 
 
-    Route::get('branches', [BranchesController::class, 'index'])
-    ->name('branches.index');
-    Route::get('branches/create', [BranchesController::class, 'create'])
-    ->name('branches.create');
-    Route::get('branches/edit/{id}', [BranchesController::class, 'edit'])
-        ->name('branches.edit');
+        Route::get('branches', [BranchesController::class, 'index'])
+            ->name('branches.index');
+        Route::get('branches/create', [BranchesController::class, 'create'])
+            ->name('branches.create');
+        Route::get('branches/edit/{id}', [BranchesController::class, 'edit'])
+            ->name('branches.edit');
 
-    Route::post('branches', [BranchesController::class, 'store'])
-        ->name('branches.store');
+        Route::post('branches', [BranchesController::class, 'store'])
+            ->name('branches.store');
 
-    Route::put('branches/{id}', [BranchesController::class, 'update'])
-    ->name('branches.update');
+        Route::put('branches/{id}', [BranchesController::class, 'update'])
+            ->name('branches.update');
 
-    Route::delete('branches/{id}', [BranchesController::class, 'destroy'])
-        ->name('branches.destroy');
+        Route::delete('branches/{id}', [BranchesController::class, 'destroy'])
+            ->name('branches.destroy');
 
 
         Route::get('categories', [CategoriesController::class, 'index'])
@@ -69,35 +94,35 @@ Route::middleware(['auth', RootDomainAccessMiddleware::class,
         Route::post('products', [ProductsController::class, 'store'])
             ->name('products.store');
 
-        Route::put('products/{id}', [ProductsController::class, 'update'])
+        Route::post('products/{id}', [ProductsController::class, 'update'])
             ->name('products.update');
 
         Route::delete('products/{id}', [ProductsController::class, 'destroy'])
             ->name('products.destroy');
 
 
-    Route::get('settings', [TenantSettingsController::class, 'index'])
-    ->name('tenant.settings');
+        Route::get('settings', [TenantSettingsController::class, 'index'])
+            ->name('tenant.settings');
 
-    Route::post('settings', [TenantSettingsController::class, 'updateUiSettings'])
-        ->name('tenant.settings.ui');
+        Route::post('settings', [TenantSettingsController::class, 'updateUiSettings'])
+            ->name('tenant.settings.ui');
 
-    Route::get('delivery', [TenantSettingsController::class, 'getDeliverySettings'])
-        ->name('tenant.delivery.settings');
+        Route::get('delivery', [TenantSettingsController::class, 'getDeliverySettings'])
+            ->name('tenant.delivery.settings');
 
-    Route::post('delivery', [TenantSettingsController::class, 'updateDeliverySettings'])
-        ->name('tenant.delivery.settings');
+        Route::post('delivery', [TenantSettingsController::class, 'updateDeliverySettings'])
+            ->name('tenant.delivery.settings');
 
-    Route::get('subscription', [TenantSettingsController::class, 'subscription'])
-        ->name('tenant.subscription');
+        Route::get('subscription', [TenantSettingsController::class, 'subscription'])
+            ->name('tenant.subscription');
 
 
-    Route::get('management', [TenantsManagementController::class, 'index'])
-    ->name('tenant.management');
-    Route::post('management/upgrade/{id}', [TenantsManagementController::class, 'upgradeTenant'])
-        ->name('tenant.management.upgrade');
+        Route::get('management', [TenantsManagementController::class, 'index'])
+            ->name('tenant.management');
+        Route::post('management/upgrade/{id}', [TenantsManagementController::class, 'upgradeTenant'])
+            ->name('tenant.management.upgrade');
 
-});
+    });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

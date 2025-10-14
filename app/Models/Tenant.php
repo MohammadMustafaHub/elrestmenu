@@ -107,6 +107,15 @@ class Tenant extends Model
         return $categoriesUsage >= $categoriesLimit;
     }
 
+    public function isActive(): bool
+    {
+        if(Carbon::parse($this->subscription_ends_at) < Carbon::now()){
+            return false;
+        }
+
+        return true;
+    }
+
 }
 
 

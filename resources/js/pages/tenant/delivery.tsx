@@ -140,7 +140,6 @@ export default function TenantDelivery({ settings }: DeliveryPageProps) {
                                                         id="delivery_fee"
                                                         name="delivery_fee"
                                                         type="number"
-                                                        step="50"
                                                         min="0"
                                                         defaultValue={
                                                             settings?.delivery_fee?.toString() || "0"
@@ -185,7 +184,7 @@ export default function TenantDelivery({ settings }: DeliveryPageProps) {
                                                             </Button>
                                                         )}
                                                     </div>
-                                                    
+
                                                     <div className="grid gap-2">
                                                         <Label htmlFor={`additional_description_${index}`}>
                                                             وصف الرسوم الإضافية
@@ -209,7 +208,6 @@ export default function TenantDelivery({ settings }: DeliveryPageProps) {
                                                             <Input
                                                                 id={`additional_amount_${index}`}
                                                                 type="number"
-                                                                step="50"
                                                                 min="0"
                                                                 value={fee.amount}
                                                                 onChange={(e) => updateAdditionalFee(index, 'amount', Number(e.target.value))}
@@ -224,7 +222,7 @@ export default function TenantDelivery({ settings }: DeliveryPageProps) {
                                                     </div>
                                                 </div>
                                             ))}
-                                            
+
                                             <Button
                                                 type="button"
                                                 variant="outline"

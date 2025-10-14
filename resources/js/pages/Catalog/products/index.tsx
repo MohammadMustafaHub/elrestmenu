@@ -146,7 +146,7 @@ export default function Products({ data }: { data: PaginatedData }) {
                                                 <div className="flex justify-start">
                                                     {product.image ? (
                                                         <img
-                                                            src={`/storage/${product.image}`}
+                                                            src={`https://images.elrestmenu.com/${product.image}`}
                                                             alt={product.name}
                                                             className="h-12 w-12 rounded-lg object-cover border"
                                                         />

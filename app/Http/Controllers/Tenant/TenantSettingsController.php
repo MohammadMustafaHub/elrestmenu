@@ -37,7 +37,7 @@ class TenantSettingsController extends Controller
         // dd($logoUrl);
         if($request->hasFile('logo'))
         {
-            $logoUrl = $request->file('logo')->store('logos', 'public');
+            $logoUrl = $request->file('logo')->store('logos', 'r2');
         }
 
         $tenant->setTenantSettings(new TenantSettings(

@@ -80,7 +80,7 @@ export default function ProductsForm({
 
     const [isActive, setIsActive] = useState<boolean>(data?.is_active ?? true);
     const [imagePreview, setImagePreview] = useState<string | null>(
-        data?.image ? `/storage/${data.image}` : null,
+        data?.image ? `https://images.elrestmenu.com/${data.image}` : null,
     );
     const [addons, setAddons] = useState<Addon[]>(
         data?.addons || [{ name: '', price: 0 }],
@@ -181,7 +181,7 @@ export default function ProductsForm({
                 </div>
 
                 <Form
-                    method={isEdit ? 'put' : 'post'}
+                    method={isEdit ? 'post' : 'post'}
                     action={isEdit ? `/dashboard/products/${data.id}` : '/dashboard/products'}
                     transform={(formData) => {
                         const price = Number(formData.price);
@@ -465,7 +465,7 @@ export default function ProductsForm({
                                                     <div className="relative">
                                                         <Input
                                                             type="number"
-                                                            step="0.01"
+
                                                             min="0"
                                                             value={addon.price}
                                                             onChange={(e) =>
@@ -558,7 +558,6 @@ export default function ProductsForm({
                                                 <div className="relative">
                                                     <Input
                                                         type="number"
-                                                        step="0.01"
                                                         min="0"
                                                         value={option.price}
                                                         onChange={(e) =>

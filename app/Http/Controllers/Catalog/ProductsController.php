@@ -101,7 +101,7 @@ class ProductsController extends Controller
                 'description' => $validated['description'],
                 'price' => $validated['price'],
                 'discounted_price' => $validated['discounted_price'],
-                'image' => $validated['image']->store('products', 'public'),
+                'image' => $validated['image']->store('products', 'r2'),
                 'is_active' => $validated['is_active'],
                 'addons' => $validated['addons'] ?? [],
                 'options' => $validated['options'] ?? [],
@@ -138,14 +138,15 @@ class ProductsController extends Controller
         $product->description = $validated['description'];
         $product->price = $validated['price'];
         $product->discounted_price = $validated['discounted_price'];
-        if (isset($validated['image'])) {
-            $product->image = $validated['image']->store('products', 'public');
-        }
+
         $product->is_active = $validated['is_active'];
-        $product->addons = $validated['addons'];
-        $product->options = $validated['options'];
+        $product->addons = $validated['addons'] ?? [];
+        $product->options = $validated['options'] ?? [];
         $product->category_id = $validated['category_id'];
-        $product->branches_unavailable = $validated['branches_unavailable'];
+        $product->branches_unavailable = $validated['branches_unavailable'] ?? [];
+        if (isset($validated['image'])) {
+            $product->image = $validated['image']->store('products', 'r2');
+        }
         $product->save();
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
