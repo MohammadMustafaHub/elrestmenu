@@ -6,8 +6,10 @@ use App\Http\Controllers\Catalog\ProductsController;
 use App\Http\Controllers\Management\TenantsManagementController;
 use App\Http\Controllers\Tenancy\TenantCatalogDataController;
 use App\Http\Controllers\Tenant\TenantSettingsController;
+use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\MustBeVerifiedMiddleware;
 use App\Http\Middleware\MustHaveTenantMiddleware;
+use App\Http\Middleware\ResolveTenantFromSubdomainMiddleware;
 use App\Http\Middleware\ResolveTenantFromUrlMiddleware;
 use App\Http\Middleware\RootDomainAccessMiddleware;
 use App\Models\Tenant;
@@ -17,23 +19,43 @@ use Inertia\Inertia;
 
 
 // subdomain specific routes
-Route::middleware([ResolveTenantFromUrlMiddleware::class])
-    ->prefix("api/{tenant}")
+//Route::middleware([ResolveTenantFromUrlMiddleware::class])
+//    ->prefix("api/{tenant}")
+//    ->group(function () {
+//
+//        Route::get('/products', function (Request $request) {
+//            return app(Tenant::class)->name;
+//        });
+//
+//        Route::get('/categories', [TenantCatalogDataController::class, 'getCategories']);
+//        Route::get('/branches', [TenantCatalogDataController::class, 'getBranches']);
+//        Route::get('/products', [TenantCatalogDataController::class, 'getProducts']);
+//
+//        Route::get('/tenant', function (Request $request) {
+//            return app(Tenant::class)->except('limits', 'usage', 'subscription', 'subscription_ends_at');
+//        })->name('tenant.home');
+//
+//    });
+
+Route::domain('{tenant}.' . config('tenancy.root_domain'))
+    ->middleware([ResolveTenantFromSubdomainMiddleware::class])
     ->group(function () {
-
-        Route::get('/products', function (Request $request) {
-            return app(Tenant::class)->name;
-        });
-
-        Route::get('/categories', [TenantCatalogDataController::class, 'getCategories']);
-        Route::get('/branches', [TenantCatalogDataController::class, 'getBranches']);
-        Route::get('/products', [TenantCatalogDataController::class, 'getProducts']);
-
-        Route::get('/tenant', function (Request $request) {
-            return app(Tenant::class)->except('limits', 'usage', 'subscription', 'subscription_ends_at');
-        })->name('tenant.home');
-
+    Route::get('/', function (Request $request) {
+        $branches = \App\Models\Branch::all();
+        $products = \App\Models\Product::all();
+        $categories = \App\Models\Category::all();
+        return Inertia::render('client-app/index', [
+            'products' => $products,
+            'categories' => $categories,
+            'branches' => $branches,
+        ])->rootView('client');
     });
+
+    Route::get('/cart', function (Request $request) {
+        return Inertia::render('client-app/cart');
+    })->name('cart');
+
+});
 
 
 Route::get('/', function () {

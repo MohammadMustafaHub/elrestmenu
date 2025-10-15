@@ -53,6 +53,8 @@ export interface Tenant {
     updated_at: string;
     limits: TenantLimits;
     usage: TenantUsage;
+    settings: TenantSettings;
+    delivery_settings: TenantDelivery;
 }
 
 export interface TenantLimits {
@@ -66,3 +68,69 @@ export interface TenantUsage {
     categories: number;
     branches: number;
 }
+
+export interface TenantSettings {
+    display_name: string;
+    logo_url: string;
+    working_days: string[];
+    working_starts: string;
+    working_ends: string;
+
+}
+
+export interface TenantDelivery {
+    delivery_fee: number;
+    additional_delivery_fee: { description: string; amount: number }[];
+    allow_delivery: boolean;
+}
+
+
+export interface Product {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    discounted_price?: number;
+    image: string;
+    category_id: string;
+    addons: Addon[];
+    options: Option[];
+    branches_unavailable: string[];
+    is_active: boolean;
+}
+
+export interface Addon {
+    name: string;
+    price: number;
+}
+
+export interface Option {
+    name: string;
+    price: number;
+}
+
+export interface Category {
+    id: string;
+    name: string;
+}
+
+interface Branch {
+    id: number
+    name: string
+    address: string
+    phone: string
+    is_open: boolean
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
