@@ -15,23 +15,20 @@ import { DashboardLayout } from '@/layouts/app/dashboard-layout';
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle, Save, Truck, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { TenantDelivery } from '@/types';
 
 interface AdditionalDeliveryFee {
     description: string;
     amount: number;
 }
 
-interface TenantDeliverySettings {
-    delivery_fee?: number;
-    additional_delivery_fee?: AdditionalDeliveryFee[];
-    allow_delivery?: boolean;
-}
+
 
 interface DeliveryPageProps {
-    settings?: TenantDeliverySettings;
+    settings?: TenantDelivery;
 }
 
-export default function TenantDelivery({ settings }: DeliveryPageProps) {
+export default function TenantDeliveryPage({ settings }: DeliveryPageProps) {
     const [allowDelivery, setAllowDelivery] = useState<boolean>(
         settings?.allow_delivery || false,
     );
@@ -80,7 +77,8 @@ export default function TenantDelivery({ settings }: DeliveryPageProps) {
                         const result: Record<string, any> = {
                             delivery_fee: data.delivery_fee || 0,
                             allow_delivery: allowDelivery,
-                            additional_delivery_fee: additionalFees
+                            additional_delivery_fee: additionalFees,
+                            delivery_phone: data.delivery_phone
                         };
                         return result;
                     }}
@@ -114,6 +112,15 @@ export default function TenantDelivery({ settings }: DeliveryPageProps) {
                                         </Label>
                                     </div>
                                     <InputError message={errors.allow_delivery} />
+
+                                    <Label className='mt-8'>رقم هاتف التوصيل</Label>
+                                    <Input
+                                        name='delivery_phone'
+                                        defaultValue={settings?.delivery_phone || ''}
+                                        className='mb-1'
+                                    />
+                                    <p className='text-sm text-gray-700 mt-0 pt-0' >يجب ان يكون الرقم رقم واتساب صالح</p>
+                                    <InputError message={errors.delivery_phone} />
                                 </CardContent>
                             </Card>
 

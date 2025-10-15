@@ -82,6 +82,7 @@ export interface TenantDelivery {
     delivery_fee: number;
     additional_delivery_fee: { description: string; amount: number }[];
     allow_delivery: boolean;
+    delivery_phone: string;
 }
 
 
@@ -114,7 +115,7 @@ export interface Category {
     name: string;
 }
 
-interface Branch {
+export interface Branch {
     id: number
     name: string
     address: string

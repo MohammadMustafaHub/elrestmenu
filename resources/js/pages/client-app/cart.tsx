@@ -2,11 +2,15 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { ArrowRight, ShoppingBag, MapPin, Phone, User, FileText, Tag, Plus, Minus, Trash2 } from "lucide-react"
+import { useState, useEffect } from "react"
+import { ArrowRight, ShoppingBag, MapPin, Phone, User, FileText, Tag, Plus, Minus, Trash2, AlertTriangle } from "lucide-react"
 import { useCartStore } from "@/stores/cart-store"
 import { useTenantStore } from "@/stores/tenant-store"
+import { useBranchStore } from "@/stores/branch-store"
+import { useUserDataStore } from "@/stores/user-data-store"
+import { useBranchesCacheStore } from "@/stores/branches-cache"
 import { Link } from '@inertiajs/react';
+import BranchSelectionModal from "@/components/client-ui/branch-selection-modal"
 
 interface OrderForm {
     name: string
@@ -19,10 +23,12 @@ interface OrderForm {
 export default function CartPage() {
     const { items, updateItemQuantity, removeItem, clearCart, getTotalItems, getTotalPrice } = useCartStore()
     const { tenant } = useTenantStore()
+    const { selectedBranch, setSelectedBranch } = useBranchStore()
+    const { userData, setUserData } = useUserDataStore()
     const [orderForm, setOrderForm] = useState<OrderForm>({
-        name: "",
-        phone: "",
-        location: "",
+        name: userData.name || "",
+        phone: userData.phone || "",
+        location: userData.address || "",
         notes: "",
         coupon: "",
     })
@@ -30,6 +36,32 @@ export default function CartPage() {
     const [couponApplied, setCouponApplied] = useState(false)
     const [couponDiscount, setCouponDiscount] = useState(0)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showBranchModal, setShowBranchModal] = useState(false)
+    const [unavailableItems, setUnavailableItems] = useState<string[]>([])
+
+    const { branches } = useBranchesCacheStore();
+    // Get branches from tenant (assuming it's available)
+    
+    // Update user data when form changes
+    useEffect(() => {
+        setUserData({
+            name: orderForm.name,
+            phone: orderForm.phone,
+            address: orderForm.location,
+        })
+    }, [orderForm.name, orderForm.phone, orderForm.location, setUserData])
+
+    // Check for unavailable items when branch changes
+    useEffect(() => {
+        if (selectedBranch && items.length > 0) {
+            const unavailable = items.filter(item => 
+                item.product.branches_unavailable?.includes(selectedBranch.id.toString())
+            ).map(item => item.name)
+            setUnavailableItems(unavailable)
+        } else {
+            setUnavailableItems([])
+        }
+    }, [selectedBranch, items])
 
     // Handle cart item quantity update
     const handleQuantityUpdate = (itemKey: string, change: number) => {
@@ -49,26 +81,38 @@ export default function CartPage() {
         removeItem(itemKey)
     }
 
+    // Handle branch selection
+    const handleBranchSelection = (branch: any) => {
+        setSelectedBranch(branch)
+        setShowBranchModal(false)
+    }
+
+    // Remove unavailable items from cart
+    const removeUnavailableItems = () => {
+        unavailableItems.forEach(itemName => {
+            const item = items.find(i => i.name === itemName)
+            if (item) {
+                removeItem(item.key)
+            }
+        })
+        setUnavailableItems([])
+    }
+
+    // Check if order can be placed
+    const canPlaceOrder = () => {
+        return selectedBranch && 
+               selectedBranch.is_open && 
+               unavailableItems.length === 0 &&
+               orderForm.name.trim() && 
+               orderForm.phone.trim() && 
+               orderForm.location.trim() &&
+               items.length > 0
+    }
+
 
     // Calculate subtotal using cart store's method
     const calculateSubtotal = () => {
         return getTotalPrice()
-    }
-
-    // Handle coupon application
-    const handleApplyCoupon = () => {
-        if (orderForm.coupon.toLowerCase() === "welcome10") {
-            const subtotal = Number(calculateSubtotal()) || 0
-            setCouponDiscount(subtotal * 0.1) // 10% discount
-            setCouponApplied(true)
-        } else if (orderForm.coupon.toLowerCase() === "save20") {
-            setCouponDiscount(50000) // 50,000 IQD discount
-            setCouponApplied(true)
-        } else {
-            alert("كود الخصم غير صحيح")
-            setCouponDiscount(0)
-            setCouponApplied(false)
-        }
     }
 
     // Calculate final total
@@ -96,18 +140,83 @@ export default function CartPage() {
             return
         }
 
+        if (!selectedBranch) {
+            alert("يرجى اختيار فرع")
+            return
+        }
+
         setIsSubmitting(true)
 
-        // Simulate API call
-        setTimeout(() => {
-            console.log("Order placed:", { items, orderData: orderForm })
-            alert(`تم تأكيد طلبك يا ${orderForm.name}! سيتم التواصل معك قريباً على ${orderForm.phone}`)
+        // Format cart items for WhatsApp message
+        const itemsList = items.map((item, index) => {
+            let itemText = `${index + 1}. ${item.name}`
+            
+            // Add option if exists
+            if (item.options.length > 0) {
+                itemText += ` (${item.options[0].name})`
+            }
+            
+            // Add addons if exist
+            if (item.addons.length > 0) {
+                const addonsText = item.addons.map(addon => `${addon.name} (+${addon.price.toLocaleString()} د.ع)`).join(', ')
+                itemText += `\n   إضافات: ${addonsText}`
+            }
+            
+            itemText += `\n   الكمية: ${item.quantity} × ${item.price.toLocaleString()} د.ع = ${(item.quantity * item.price).toLocaleString()} د.ع`
+            
+            return itemText
+        }).join('\n\n')
 
-            // Clear cart after successful order
-            clearCart()
+        // Calculate totals
+        const subtotal = calculateSubtotal()
+        const deliveryFee = Number(tenant?.delivery_settings?.delivery_fee) || 0
+        const additionalFeesTotal = tenant?.delivery_settings?.additional_delivery_fee?.reduce(
+            (total, fee) => total + (Number(fee.amount) || 0), 0
+        ) || 0
+        const total = calculateTotal()
+
+        // Format WhatsApp message
+        const message = `🛒 *طلب جديد من ${tenant?.name}*
+
+👤 *معلومات العميل:*
+الاسم: ${orderForm.name}
+الهاتف: ${orderForm.phone}
+العنوان: ${orderForm.location}
+
+🏪 *الفرع المحدد:*
+${selectedBranch.name}
+${selectedBranch.address}
+
+📦 *تفاصيل الطلب:*
+${itemsList}
+
+💰 *ملخص المبالغ:*
+المجموع الفرعي: ${subtotal.toLocaleString()} د.ع
+رسوم التوصيل: ${deliveryFee.toLocaleString()} د.ع${additionalFeesTotal > 0 ? `\nرسوم إضافية: ${additionalFeesTotal.toLocaleString()} د.ع` : ''}
+
+💳 *المجموع النهائي: ${total.toLocaleString()} د.ع*${orderForm.notes.trim() ? `\n\n📝 *ملاحظات:*\n${orderForm.notes}` : ''}`
+
+        // Get delivery phone number
+        const deliveryPhone = tenant?.delivery_settings?.delivery_phone
+        
+        if (!deliveryPhone) {
+            alert("رقم الهاتف غير متوفر")
             setIsSubmitting(false)
-            // router.push("/")
-        }, 2000)
+            return
+        }
+
+        // Create WhatsApp URL
+        const whatsappUrl = `https://wa.me/${deliveryPhone}?text=${encodeURIComponent(message)}`
+        
+        // Open WhatsApp
+        window.open(whatsappUrl, '_blank')
+        
+        // Clear cart after opening WhatsApp
+        clearCart()
+        setIsSubmitting(false)
+        
+        // Optional: Show success message
+        alert("تم فتح واتساب لإرسال طلبك!")
     }
 
     // Handle input changes
@@ -141,6 +250,77 @@ export default function CartPage() {
             </div>
 
             <div className="max-w-2xl mx-auto p-4">
+                {/* Branch Selection */}
+                {branches.length > 0 && (
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-4">
+                        <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                            <MapPin className="w-5 h-5 text-orange-600" />
+                            اختيار الفرع
+                        </h3>
+                        {selectedBranch ? (
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="font-medium">{selectedBranch.name}</p>
+                                    <p className="text-sm text-gray-600">{selectedBranch.address}</p>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className={`text-xs px-2 py-1 rounded-full ${
+                                            selectedBranch.is_open 
+                                                ? 'bg-green-100 text-green-800' 
+                                                : 'bg-red-100 text-red-800'
+                                        }`}>
+                                            {selectedBranch.is_open ? 'مفتوح' : 'مغلق'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowBranchModal(true)}
+                                    className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm transition-colors"
+                                >
+                                    تغيير الفرع
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="text-center py-4">
+                                <p className="text-gray-600 mb-3">يرجى اختيار فرع للمتابعة</p>
+                                <button
+                                    onClick={() => setShowBranchModal(true)}
+                                    className="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
+                                >
+                                    اختيار فرع
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Unavailable Items Warning */}
+                {unavailableItems.length > 0 && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                            <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                            <div className="flex-1">
+                                <h4 className="font-medium text-red-800 mb-2">
+                                    منتجات غير متوفرة في الفرع المحدد
+                                </h4>
+                                <p className="text-sm text-red-700 mb-3">
+                                    المنتجات التالية غير متوفرة في فرع {selectedBranch?.name}:
+                                </p>
+                                <ul className="text-sm text-red-700 mb-3 list-disc list-inside">
+                                    {unavailableItems.map((item, index) => (
+                                        <li key={index}>{item}</li>
+                                    ))}
+                                </ul>
+                                <button
+                                    onClick={removeUnavailableItems}
+                                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition-colors"
+                                >
+                                    إزالة المنتجات غير المتوفرة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Cart Items */}
                 {items.length === 0 ? (
                     <div className="text-center py-12">
@@ -289,32 +469,6 @@ export default function CartPage() {
                                     />
                                 </div>
 
-                                {/* Coupon Field */}
-                                <div className="mb-8">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        <Tag className="w-4 h-4 inline ml-1" />
-                                        كود الخصم
-                                    </label>
-                                    <div className="flex flex-col sm:flex-row gap-2">
-                                        <input
-                                            type="text"
-                                            value={orderForm.coupon}
-                                            onChange={(e) => handleInputChange("coupon", e.target.value.toUpperCase())}
-                                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                                            placeholder="أدخل كود الخصم"
-                                            disabled={couponApplied}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={handleApplyCoupon}
-                                            disabled={!orderForm.coupon.trim() || couponApplied}
-                                            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 text-white rounded-lg transition-colors whitespace-nowrap"
-                                        >
-                                            {couponApplied ? "مُطبق" : "تطبيق"}
-                                        </button>
-                                    </div>
-                                    {couponApplied && <p className="text-green-600 text-sm mt-1">تم تطبيق كود الخصم بنجاح!</p>}
-                                </div>
                             </div>
 
                             {/* Order Summary */}
@@ -354,22 +508,27 @@ export default function CartPage() {
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                disabled={isSubmitting || items.length === 0}
+                                disabled={isSubmitting || !canPlaceOrder()}
                                 className="w-full mt-6 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-300 text-white py-3 rounded-lg font-bold transition-colors"
                             >
-                                {isSubmitting ? "جاري تأكيد الطلب..." : `تأكيد الطلب - ${calculateTotal().toLocaleString()} د.ع`}
+                                {!selectedBranch ? "يرجى اختيار فرع" :
+                                 !selectedBranch.is_open ? "الفرع مغلق حالياً" :
+                                 unavailableItems.length > 0 ? "يرجى إزالة المنتجات غير المتوفرة" :
+                                 isSubmitting ? "جاري تأكيد الطلب..." : 
+                                 `تأكيد الطلب - ${calculateTotal().toLocaleString()} د.ع`}
                             </button>
                         </form>
-
-                        {/* Sample Coupons Info */}
-                        <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                            <p className="text-sm text-blue-800 font-medium mb-1">أكواد خصم متاحة:</p>
-                            <p className="text-xs text-blue-600">WELCOME10 - خصم 10%</p>
-                            <p className="text-xs text-blue-600">SAVE20 - خصم 50,000 دينار</p>
-                        </div>
                     </>
                 )}
             </div>
+
+            {/* Branch Selection Modal */}
+            <BranchSelectionModal
+                isOpen={showBranchModal}
+                branches={branches}
+                onSelectBranch={handleBranchSelection}
+                onClose={() => setShowBranchModal(false)}
+            />
         </div>
     )
 }

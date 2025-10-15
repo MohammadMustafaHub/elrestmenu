@@ -84,9 +84,6 @@ export default function FoodOrderingClient({
                             لا توجد منتجات متاحة في هذه الفئة حالياً. يرجى
                             المحاولة مرة أخرى لاحقاً أو تصفح فئات أخرى.
                         </p>
-                        <button className="mt-4 rounded-lg bg-orange-600 px-4 py-2 text-white transition-colors hover:bg-orange-700">
-                            إعادة المحاولة
-                        </button>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch">

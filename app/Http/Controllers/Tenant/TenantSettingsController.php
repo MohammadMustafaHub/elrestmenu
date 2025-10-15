@@ -70,6 +70,7 @@ class TenantSettingsController extends Controller
             'additional_delivery_fee.*.description' => 'string|nullable|max:255',
             'additional_delivery_fee.*.amount' => 'numeric|nullable|min:0',
             'allow_delivery' => 'required|boolean',
+            'delivery_phone' => 'required|string|max:20',
         ]);
 
         // Filter out empty additional fees
@@ -82,13 +83,13 @@ class TenantSettingsController extends Controller
 
         $tenant = auth()->user()->Tenant;
         $tenant->setDeliverySettings(new TenantDeliverySettings(
+            $validated['delivery_phone'],
             $validated['delivery_fee'],
             $additionalFees,
             $validated['allow_delivery'],
         ));
         $tenant->save();
-        return redirect()->back();
-
+        return redirect()->back()->with('success', 'Delivery settings updated.');
     }
 
     public function subscription()
