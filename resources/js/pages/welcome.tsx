@@ -4,7 +4,6 @@ import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Welcome() {
     const { auth, tenant } = usePage<SharedData>().props;
-    console.log(tenant);
     return (
         <>
             <Head title="Welcome">

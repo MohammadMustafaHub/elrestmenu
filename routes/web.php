@@ -41,6 +41,10 @@ Route::domain('{tenant}.' . config('tenancy.root_domain'))
     ->middleware([ResolveTenantFromSubdomainMiddleware::class])
     ->group(function () {
     Route::get('/', function (Request $request) {
+        $tenant = app(Tenant::class);
+        if (!$tenant->isActive()) {
+            abort(404);
+        }
         $branches = \App\Models\Branch::all();
         $products = \App\Models\Product::all();
         $categories = \App\Models\Category::all();
@@ -59,7 +63,7 @@ Route::domain('{tenant}.' . config('tenancy.root_domain'))
 
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return view('marketing-site');
 })->name('home');
 
 Route::middleware(['auth', RootDomainAccessMiddleware::class,

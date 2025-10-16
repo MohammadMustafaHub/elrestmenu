@@ -10,6 +10,7 @@ import { register } from '@/routes';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
+import { formatIraqNumber } from '@/lib/phone-number-formatter';
 
 interface LoginProps {
     status?: string;
@@ -28,6 +29,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                 {...AuthenticatedSessionController.store.form()}
                 resetOnSuccess={['password']}
                 className="flex flex-col gap-6"
+                transform={(form) => {
+                    return {
+                        ...form,
+                        phone: formatIraqNumber(form.phone as string)
+                    }
+                }}
             >
                 {({ processing, errors }) => (
                     <>

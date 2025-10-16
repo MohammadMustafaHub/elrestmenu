@@ -16,12 +16,11 @@ export default function ClientAppPage({ products, categories, branches } :
     const tenant = usePage<SharedData>().props.tenant;
     const { setTenant } = useTenantStore();
     const { setBranches } = useBranchesCacheStore();
-    
+
     useEffect(() => {
         updateAppearance("light");
         setTenant(tenant);
         setBranches(branches);
-        console.log(tenant);
     }, [setTenant, tenant, updateAppearance, setBranches, branches]);
 
 

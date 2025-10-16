@@ -1,21 +1,16 @@
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { DashboardLayout } from '@/layouts/app/dashboard-layout';
 import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle, Save, Truck, Plus, Trash2 } from 'lucide-react';
+import { LoaderCircle, Plus, Save, Trash2, Truck } from 'lucide-react';
 import { useState } from 'react';
 import { TenantDelivery } from '@/types';
+import { formatIraqNumber } from '@/lib/phone-number-formatter';
 
 interface AdditionalDeliveryFee {
     description: string;
@@ -53,7 +48,6 @@ export default function TenantDeliveryPage({ settings }: DeliveryPageProps) {
         setAdditionalFees(updatedFees);
     };
 
-    console.log('delivery settings', settings);
 
     return (
         <DashboardLayout>
@@ -74,13 +68,15 @@ export default function TenantDeliveryPage({ settings }: DeliveryPageProps) {
                 <Form
                     method="post"
                     transform={(data) => {
-                        const result: Record<string, any> = {
+
+                        return {
                             delivery_fee: data.delivery_fee || 0,
                             allow_delivery: allowDelivery,
                             additional_delivery_fee: additionalFees,
-                            delivery_phone: data.delivery_phone
+                            delivery_phone: formatIraqNumber(
+                                data.delivery_phone as string,
+                            ),
                         };
-                        return result;
                     }}
                     className="space-y-6"
                 >

@@ -41,7 +41,6 @@ export default function TenantSettings({ settings }: SettingsPageProps) {
     const [logoPreview, setLogoPreview] = useState<string | null>(
         settings?.logo_url ? `https://images.elrestmenu.com/${settings.logo_url}` : null,
     );
-    console.log('settings', settings);
 
     const workingDays = useRef<string[]>(settings?.working_days || []);
     const image = useRef<File | null>(null);

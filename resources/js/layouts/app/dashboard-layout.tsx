@@ -98,7 +98,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     try {
         await navigator.clipboard.writeText(`https://${restaurantUrl}`);
     } catch (err) {
-        console.log(err);
     }
   };
 
