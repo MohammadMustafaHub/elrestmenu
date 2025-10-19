@@ -58,7 +58,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     <img
                         src={`https://images.elrestmenu.com/${product.image}`}
                         alt={product.name}
-                        className="w-full h-36 object-contain"
+                        className="w-full max-h-48 object-cover"
                     />
                     {product.discounted_price && product.discounted_price < product.price && (
                         <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">

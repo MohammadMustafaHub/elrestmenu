@@ -28,28 +28,28 @@ export default function MobileHeader({ branches = [] }: MobileHeaderProps) {
   useEffect(() => {
     if (branches.length > 0 && !hasInitialized) {
       setHasInitialized(true)
-      
+
       // Check if no branch is selected
       if (!selectedBranch) {
         setShowBranchModal(true)
         return
       }
-      
+
       // Check if selected branch exists in current branches list
       const currentBranch = branches.find(branch => branch.id === selectedBranch.id)
-      
+
       if (!currentBranch) {
         // Selected branch not found in current list, show modal
         setShowBranchModal(true)
         return
       }
-      
+
       // Check if selected branch is closed
       if (!currentBranch.is_open) {
         setShowBranchModal(true)
         return
       }
-      
+
       // Update selected branch with current data (in case details changed)
       setSelectedBranch(currentBranch)
     }
@@ -68,17 +68,7 @@ export default function MobileHeader({ branches = [] }: MobileHeaderProps) {
     <>
       <header className=" bg-white shadow-sm px-4 py-3 sticky top-0 z-50">
         <div className="flex items-center justify-between">
-          {logo_url && (
-            <div className="flex items-center">
-              <img
-                src={`https://images.elrestmenu.com/${logo_url}`}
-                alt="Logo"
-                className="max-h-12 max-w-32 h-auto w-auto object-contain shadow-sm"
-              />
-            </div>
-          )}
-          {!logo_url && <span className="text-xl font-bold text-orange-600">{tenant?.settings.display_name}</span>}
-
+          <span className="text-xl font-bold text-orange-600">{tenant?.settings.display_name ?? tenant?.name}</span>
           <div className="flex items-center gap-2">
             {/* Branch Selection Button */}
             {branches.length > 0 && (

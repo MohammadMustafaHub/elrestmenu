@@ -59,10 +59,11 @@ export default function ProductAddonModal({ isOpen, onClose, product, onAddToCar
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end md:items-center justify-center z-50">
-            <div className="bg-white w-full md:w-96 md:rounded-lg max-h-[90vh] overflow-y-auto">
+            <div className="bg-white w-full md:w-96 md:rounded-lg max-h-[85vh] md:max-h-[90vh] overflow-y-auto"
+                 style={{ marginTop: 'env(safe-area-inset-top, 40px)' }}>
 
                 {/* Modal Header with only Close Button */}
-                <div className="sticky top-0 bg-white border-b px-4 py-3 flex justify-end">
+                <div className="sticky top-0 bg-white border-b px-4 py-3 flex justify-end z-10">
                     <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                         <X className="w-5 h-5" />
                     </button>
