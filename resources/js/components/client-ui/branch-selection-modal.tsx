@@ -23,7 +23,7 @@ export default function BranchSelectionModal({ isOpen, branches, onSelectBranch,
       onSelectBranch(singleBranch)
       onClose()
     }
-  }, [branches, setSelectedBranch, onSelectBranch, onClose])
+  }, [branches])
 
   if (!isOpen || branches.length <= 1) return null
 

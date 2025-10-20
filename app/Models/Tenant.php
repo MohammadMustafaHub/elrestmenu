@@ -43,15 +43,15 @@ class Tenant extends Model
                 'branches' => 1,
             ],
             Subscription::Premium => [
-                'products' => 1000,
+                'products' => 10000,
                 'categories' => 200,
                 'branches' => 50,
             ],
         };
 
         $sub_ends_at = match ($subscription) {
-            Subscription::Free => Carbon::now()->addDays(5),
-            Subscription::Pro, Subscription::Premium => Carbon::now()->addDays(365),
+            Subscription::Free => Carbon::now()->addDays(3),
+            Subscription::Pro, Subscription::Premium => Carbon::now()->addYears(1),
         };
 
         $this->subscription = $subscription->value;

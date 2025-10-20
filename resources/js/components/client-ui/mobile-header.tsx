@@ -5,7 +5,7 @@ import { useBranchStore } from "@/stores/branch-store"
 import { useState, useEffect } from "react"
 import BranchSelectionModal from "@/components/client-ui/branch-selection-modal"
 import { Branch, Tenant } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { useTenantStore } from '@/stores/tenant-store';
 
 
@@ -66,6 +66,11 @@ export default function MobileHeader({ branches = [] }: MobileHeaderProps) {
 
   return (
     <>
+
+        <Head>
+            <link rel="icon" href={logo_url ? `https://images.elrestmenu.com/${logo_url}` : ""} />
+            {/*<link rel="alternate icon" href={logo_url ?? ""} />*/}
+        </Head>
       <header className=" bg-white shadow-sm px-4 py-3 sticky top-0 z-50">
         <div className="flex items-center justify-between">
           <span className="text-xl font-bold text-orange-600">{tenant?.settings.display_name ?? tenant?.name}</span>

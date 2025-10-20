@@ -3,7 +3,7 @@ import { Branch, Category, Product, SharedData } from '@/types';
 import { useAppearance } from '@/hooks/use-appearance';
 import { useEffect } from 'react';
 import MobileHeader from '@/components/client-ui/mobile-header';
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import TenantFooter from '@/components/client-ui/tenant-footer';
 import { useTenantStore } from '@/stores/tenant-store';
 import { useBranchesCacheStore } from '@/stores/branches-cache';

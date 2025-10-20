@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ElRestMenu - منصة القوائم الإلكترونية للمطاعم</title>
     <meta name="description" content="منصة شاملة لإنشاء وإدارة القوائم الإلكترونية للمطاعم مع نظام طلبات متقدم وإدارة الفروع">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/logo.png">
     @vite(['resources/css/app.css'])
     <style>
         .gradient-bg {
@@ -54,7 +54,7 @@
         <div class="absolute inset-0 opacity-10">
             <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.3"><circle cx="7" cy="7" r="2"/><circle cx="27" cy="7" r="2"/><circle cx="47" cy="7" r="2"/><circle cx="7" cy="27" r="2"/><circle cx="27" cy="27" r="2"/><circle cx="47" cy="27" r="2"/><circle cx="7" cy="47" r="2"/><circle cx="27" cy="47" r="2"/><circle cx="47" cy="47" r="2"/></g></svg>');"></div>
         </div>
-        
+
         <!-- Floating Elements -->
         <div class="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse"></div>
         <div class="absolute top-40 right-20 w-32 h-32 bg-yellow-300/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
@@ -68,16 +68,16 @@
                         <div class="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-medium">
                             ✨ منصة القوائم الرقمية الأولى في العراق
                         </div>
-                        
+
                         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                            حوّل مطعمك إلى 
+                            حوّل مطعمك إلى
                             <span class="relative inline-block">
                                 <span class="relative z-10 bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">تجربة رقمية</span>
                                 <span class="absolute bottom-2 left-0 w-full h-3 bg-yellow-300/30 -z-10 transform -skew-x-12"></span>
                             </span>
                             متميزة
                         </h1>
-                        
+
                         <p class="text-xl lg:text-2xl text-orange-100 leading-relaxed max-w-2xl">
                             أنشئ قائمة طعام رقمية احترافية، واستقبل الطلبات مباشرة عبر واتساب، وأدر فروعك بكل سهولة
                         </p>
@@ -128,7 +128,7 @@
                                         <h3 class="font-bold">مطعم الذوق العراقي</h3>
                                         <p class="text-sm opacity-90">القائمة الإلكترونية</p>
                                     </div>
-                                    
+
                                     <!-- Menu Items -->
                                     <div class="p-4 space-y-3">
                                         <div class="bg-white rounded-lg p-3 shadow-sm border border-orange-100">
@@ -141,7 +141,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="bg-white rounded-lg p-3 shadow-sm border border-orange-100">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-12 h-12 bg-yellow-200 rounded-lg"></div>
@@ -152,7 +152,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="bg-white rounded-lg p-3 shadow-sm border border-orange-100">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-12 h-12 bg-red-200 rounded-lg"></div>
@@ -164,7 +164,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Cart Button -->
                                     <div class="absolute bottom-4 left-4 right-4">
                                         <button class="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold text-sm shadow-lg">
@@ -554,7 +554,7 @@
                         منصة شاملة لإنشاء وإدارة القوائم الإلكترونية للمطاعم مع نظام طلبات متقدم وإدارة الفروع
                     </p>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-bold mb-4">روابط سريعة</h3>
                     <ul class="space-y-2">
@@ -564,7 +564,7 @@
                         <li><a href="/register" class="text-gray-300 hover:text-white transition-colors">إنشاء حساب</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-bold mb-4">الدعم</h3>
                     <ul class="space-y-2">
@@ -575,7 +575,7 @@
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-700 mt-8 pt-8 text-center">
                 <p class="text-gray-300">
                     © 2025 ElRestMenu. جميع الحقوق محفوظة.

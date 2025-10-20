@@ -12,24 +12,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-    Crown, 
-    Calendar, 
-    Users, 
-    Package, 
-    Tags, 
+import {
+    Crown,
+    Calendar,
+    Package,
+    Tags,
     Building2,
     Settings,
     AlertTriangle,
-    ExternalLink,
     Plus,
-    Eye,
     Edit,
     Clock,
     CheckCircle,
     Phone,
-    MapPin,
-    Mail,
     Image,
     Truck,
     DollarSign,
@@ -103,19 +98,19 @@ export default function Dashboard() {
     // Check for missing settings
     const getMissingSettings = () => {
         const missing = [];
-        
+
         // From settings.tsx - basic tenant settings
         if (!tenant?.settings?.display_name) missing.push('اسم المطعم');
         if (!tenant?.settings?.logo_url) missing.push('شعار المطعم');
         if (!tenant?.settings?.working_starts) missing.push('وقت بداية العمل');
         if (!tenant?.settings?.working_ends) missing.push('وقت نهاية العمل');
         if (!tenant?.settings?.working_days || tenant?.settings?.working_days.length === 0) missing.push('أيام العمل');
-        
+
         // From delivery.tsx - delivery settings
         if (tenant?.delivery_settings?.allow_delivery === undefined) missing.push('حالة التوصيل');
         if (tenant?.delivery_settings?.allow_delivery && !tenant?.delivery_settings?.delivery_fee) missing.push('رسوم التوصيل');
         if (tenant?.delivery_settings?.allow_delivery && !tenant?.delivery_settings?.delivery_phone) missing.push('رقم التوصيل');
-        
+
         return missing;
     };
 
@@ -125,7 +120,7 @@ export default function Dashboard() {
     return (
         <DashboardLayout>
             <Head title="لوحة التحكم" />
-            
+
             <div className="space-y-6" dir="rtl">
                 {/* Welcome Header */}
                 <div>
@@ -147,27 +142,27 @@ export default function Dashboard() {
                                 <AlertDescription className="flex items-center justify-between">
                                     <span>انتهت صلاحية اشتراكك! يرجى تجديد الاشتراك للمتابعة.</span>
                                     <Button size="sm" asChild>
-                                        <Link href="/tenant/subscription">تجديد الاشتراك</Link>
+                                        <Link href="/dashboard/subscription">تجديد الاشتراك</Link>
                                     </Button>
                                 </AlertDescription>
                             </Alert>
                         )}
 
                         {/* Settings Alert */}
-                        {hasIncompleteSettings && (
-                            <Alert className="border-yellow-200 bg-yellow-50">
-                                <Settings className="h-4 w-4" />
-                                <AlertDescription className="flex items-center justify-between">
-                                    <div>
-                                        <p className="font-medium">إعداداتك غير مكتملة</p>
-                                        <p className="text-sm">المفقود: {missingSettings.join(', ')}</p>
-                                    </div>
-                                    <Button size="sm" variant="outline" asChild>
-                                        <Link href="/tenant/settings">إكمال الإعدادات</Link>
-                                    </Button>
-                                </AlertDescription>
-                            </Alert>
-                        )}
+                        {/*{hasIncompleteSettings && (*/}
+                        {/*    <Alert className="border-yellow-200 bg-yellow-50">*/}
+                        {/*        <Settings className="h-4 w-4" />*/}
+                        {/*        <AlertDescription className="flex items-center justify-between">*/}
+                        {/*            <div>*/}
+                        {/*                <p className="font-medium">إعداداتك غير مكتملة</p>*/}
+                        {/*                <p className="text-sm">المفقود: {missingSettings.join(', ')}</p>*/}
+                        {/*            </div>*/}
+                        {/*            <Button size="sm" variant="outline" asChild>*/}
+                        {/*                <Link href="/dashboard/settings">إكمال الإعدادات</Link>*/}
+                        {/*            </Button>*/}
+                        {/*        </AlertDescription>*/}
+                        {/*    </Alert>*/}
+                        {/*)}*/}
                     </div>
                 )}
 
@@ -249,7 +244,7 @@ export default function Dashboard() {
                                     <Crown className="h-5 w-5" />
                                     تفاصيل الاشتراك
                                 </CardTitle>
-                                <Badge 
+                                <Badge
                                     variant={getSubscriptionBadgeVariant(tenant?.subscription || 'free')}
                                     className="flex items-center gap-1"
                                 >
@@ -263,7 +258,7 @@ export default function Dashboard() {
                                 <div className="flex items-center gap-2 text-sm">
                                     <Calendar className="h-4 w-4" />
                                     <span>
-                                        {isSubscriptionExpired() 
+                                        {isSubscriptionExpired()
                                             ? `انتهت في ${formatDate(tenant.subscription_ends_at)}`
                                             : `ينتهي في ${formatDate(tenant.subscription_ends_at)}`
                                         }
@@ -278,19 +273,19 @@ export default function Dashboard() {
                                         <span>المنتجات</span>
                                         <span>{tenant?.usage?.products || 0}/{tenant?.limits?.products || 0}</span>
                                     </div>
-                                    <Progress 
-                                        value={calculateUsagePercentage(tenant?.usage?.products || 0, tenant?.limits?.products || 1)} 
+                                    <Progress
+                                        value={calculateUsagePercentage(tenant?.usage?.products || 0, tenant?.limits?.products || 1)}
                                         className="h-2"
                                     />
                                 </div>
-                                
+
                                 <div className="space-y-1">
                                     <div className="flex justify-between text-sm">
                                         <span>الفئات</span>
                                         <span>{tenant?.usage?.categories || 0}/{tenant?.limits?.categories || 0}</span>
                                     </div>
-                                    <Progress 
-                                        value={calculateUsagePercentage(tenant?.usage?.categories || 0, tenant?.limits?.categories || 1)} 
+                                    <Progress
+                                        value={calculateUsagePercentage(tenant?.usage?.categories || 0, tenant?.limits?.categories || 1)}
                                         className="h-2"
                                     />
                                 </div>
@@ -300,15 +295,15 @@ export default function Dashboard() {
                                         <span>الفروع</span>
                                         <span>{tenant?.usage?.branches || 0}/{tenant?.limits?.branches || 0}</span>
                                     </div>
-                                    <Progress 
-                                        value={calculateUsagePercentage(tenant?.usage?.branches || 0, tenant?.limits?.branches || 1)} 
+                                    <Progress
+                                        value={calculateUsagePercentage(tenant?.usage?.branches || 0, tenant?.limits?.branches || 1)}
                                         className="h-2"
                                     />
                                 </div>
                             </div>
 
                             <Button asChild className="w-full">
-                                <Link href="/tenant/subscription">
+                                <Link href="/dashboard/subscription">
                                     <Crown className="h-4 w-4 mr-2" />
                                     إدارة الاشتراك
                                 </Link>
@@ -334,14 +329,14 @@ export default function Dashboard() {
                                     إضافة منتج جديد
                                 </Link>
                             </Button>
-                            
+
                             <Button asChild variant="outline" className="w-full justify-start">
                                 <Link href="/catalog/categories">
                                     <Plus className="h-4 w-4 mr-2" />
                                     إضافة فئة جديدة
                                 </Link>
                             </Button>
-                            
+
                             <Button asChild variant="outline" className="w-full justify-start">
                                 <Link href="/catalog/branches">
                                     <Plus className="h-4 w-4 mr-2" />
@@ -368,7 +363,7 @@ export default function Dashboard() {
                             {/* Basic Settings */}
                             <div className="space-y-4">
                                 <h4 className="font-medium">الإعدادات الأساسية</h4>
-                                
+
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
@@ -423,7 +418,7 @@ export default function Dashboard() {
                             {/* Delivery Settings */}
                             <div className="space-y-4">
                                 <h4 className="font-medium">إعدادات التوصيل</h4>
-                                
+
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
@@ -476,14 +471,14 @@ export default function Dashboard() {
 
                         <div className="mt-6 grid gap-2 sm:grid-cols-2">
                             <Button asChild>
-                                <Link href="/tenant/settings">
+                                <Link href="/dashboard/settings">
                                     <Edit className="h-4 w-4 mr-2" />
                                     إعدادات المطعم
                                 </Link>
                             </Button>
-                            
+
                             <Button asChild variant="outline">
-                                <Link href="/tenant/delivery">
+                                <Link href="/dashboard/delivery">
                                     <Truck className="h-4 w-4 mr-2" />
                                     إعدادات التوصيل
                                 </Link>

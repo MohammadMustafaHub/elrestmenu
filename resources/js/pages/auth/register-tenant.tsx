@@ -51,6 +51,7 @@ export default function RegisterTenant() {
                                 <p className="text-xs text-muted-foreground flex flex-col">
                                     سيكون رابط مطعمك:
                                     <span dir='ltr' className='text-right'>https://اسم-المطعم.elrestmenu.com</span>
+                                    يجب ان يتكون الاسم من احرف و ارقام انكليزية فقط و - (لايمكن للاسم ان يبدا ب - او ينتهي ب -)
                                 </p>
 
 
