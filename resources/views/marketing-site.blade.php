@@ -97,22 +97,6 @@
                             </span>
                         </a>
                     </div>
-
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-6 pt-8">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">200+</div>
-                            <div class="text-orange-200 text-sm">مطعم يثق بنا</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">10K+</div>
-                            <div class="text-orange-200 text-sm">طلب شهرياً</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">99%</div>
-                            <div class="text-orange-200 text-sm">رضا العملاء</div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Right Content - Mockup -->
@@ -366,7 +350,7 @@
                     <div class="text-center">
                         <h3 class="text-2xl font-bold text-gray-900 mb-4">مجاني</h3>
                         <div class="text-4xl font-bold text-gray-900 mb-2">0 د.ع</div>
-                        <p class="text-gray-600 mb-6">5 أيام تجريبية</p>
+                        <p class="text-gray-600 mb-6">3 أيام تجريبية</p>
                     </div>
                     <ul class="space-y-4 mb-8">
                         <li class="flex items-center">
