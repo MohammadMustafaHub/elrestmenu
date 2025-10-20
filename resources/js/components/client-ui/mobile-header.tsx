@@ -20,7 +20,7 @@ export default function MobileHeader({ branches = [] }: MobileHeaderProps) {
   const [showBranchModal, setShowBranchModal] = useState(false)
   const [hasInitialized, setHasInitialized] = useState(false)
   const { tenant } = useTenantStore();
-  const logo_url = tenant?.settings.logo_url ?? null;
+  const logo_url = tenant?.settings?.logo_url ?? null;
   // Check if delivery is allowed
   const isDeliveryAllowed = tenant?.delivery_settings?.allow_delivery ?? false
 
@@ -68,12 +68,12 @@ export default function MobileHeader({ branches = [] }: MobileHeaderProps) {
     <>
 
         <Head>
-            <link rel="icon" href={logo_url ? `https://images.elrestmenu.com/${logo_url}` : ""} />
+            <link rel="icon" href={logo_url || false ? `https://images.elrestmenu.com/${logo_url}` : ""} />
             {/*<link rel="alternate icon" href={logo_url ?? ""} />*/}
         </Head>
       <header className=" bg-white shadow-sm px-4 py-3 sticky top-0 z-50">
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-orange-600">{tenant?.settings.display_name ?? tenant?.name}</span>
+          <span className="text-xl font-bold text-orange-600">{tenant?.settings?.display_name ?? tenant?.name}</span>
           <div className="flex items-center gap-2">
             {/* Branch Selection Button */}
             {branches.length > 0 && (

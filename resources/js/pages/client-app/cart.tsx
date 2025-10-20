@@ -176,25 +176,25 @@ export default function CartPage() {
         const total = calculateTotal()
 
         // Format WhatsApp message
-        const message = `🛒 *طلب جديد من ${tenant?.name}*
+        const message = `*طلب جديد من ${tenant?.name}*
 
-👤 *معلومات العميل:*
+*معلومات العميل:*
 الاسم: ${orderForm.name}
 الهاتف: ${orderForm.phone}
 العنوان: ${orderForm.location}
 
-🏪 *الفرع المحدد:*
+*الفرع المحدد:*
 ${selectedBranch.name}
 ${selectedBranch.address}
 
-📦 *تفاصيل الطلب:*
+*تفاصيل الطلب:*
 ${itemsList}
 
-💰 *ملخص المبالغ:*
+*ملخص المبالغ:*
 المجموع الفرعي: ${subtotal.toLocaleString()} د.ع
 رسوم التوصيل: ${deliveryFee.toLocaleString()} د.ع${additionalFeesTotal > 0 ? `\nرسوم إضافية: ${additionalFeesTotal.toLocaleString()} د.ع` : ''}
 
-💳 *المجموع النهائي: ${total.toLocaleString()} د.ع*${orderForm.notes.trim() ? `\n\n📝 *ملاحظات:*\n${orderForm.notes}` : ''}`
+*المجموع النهائي: ${total.toLocaleString()} د.ع*${orderForm.notes.trim() ? `\n\n*ملاحظات:*\n${orderForm.notes}` : ''}`
 
         // Get delivery phone number
         const deliveryPhone = tenant?.delivery_settings?.delivery_phone
@@ -355,7 +355,15 @@ ${itemsList}
                                                     </span>
                                                 )}
                                             </h3>
-                                            <p className="text-gray-600 mb-2">{item.price.toLocaleString()} د.ع</p>
+                                            <p className="text-gray-600 mb-2">
+                                                {(() => {
+                                                    const basePrice = item.price;
+                                                    const optionPrice = item.options.length > 0 ? item.options[0].price : 0;
+                                                    const addonsPrice = item.addons.reduce((sum, addon) => sum + addon.price, 0);
+                                                    const totalPrice = basePrice + optionPrice + addonsPrice;
+                                                    return totalPrice.toLocaleString();
+                                                })()} د.ع
+                                            </p>
 
                                             {/* Addons */}
                                             {item.addons.length > 0 && (
@@ -433,8 +441,9 @@ ${itemsList}
                                         value={orderForm.phone}
                                         onChange={(e) => handleInputChange("phone", e.target.value)}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                                        placeholder="05xxxxxxxx"
+                                        placeholder="07xxxxxxxxx"
                                         required
+                                        dir="rtl"
                                     />
                                 </div>
 
