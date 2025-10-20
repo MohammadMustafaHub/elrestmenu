@@ -151,9 +151,24 @@ export default function CartPage() {
         const itemsList = items.map((item, index) => {
             let itemText = `${index + 1}. ${item.name}`
             
+            // Calculate total price for this item (base + option + addons)
+            const basePrice = item.price;
+            const optionPrice = item.options.length > 0 ? item.options[0].price : 0;
+            const addonsPrice = item.addons.reduce((sum, addon) => sum + addon.price, 0);
+            const itemUnitPrice = basePrice + optionPrice + addonsPrice;
+            const itemTotalPrice = item.quantity * itemUnitPrice;
+            
             // Add option if exists
             if (item.options.length > 0) {
                 itemText += ` (${item.options[0].name})`
+            }
+            
+            // Add base price info
+            const basePlusOption = basePrice + optionPrice;
+            if (item.options.length > 0) {
+                itemText += `\n   السعر: ${basePlusOption.toLocaleString()} د.ع`
+            } else {
+                itemText += `\n   السعر: ${basePrice.toLocaleString()} د.ع`
             }
             
             // Add addons if exist
@@ -162,7 +177,7 @@ export default function CartPage() {
                 itemText += `\n   إضافات: ${addonsText}`
             }
             
-            itemText += `\n   الكمية: ${item.quantity} × ${item.price.toLocaleString()} د.ع = ${(item.quantity * item.price).toLocaleString()} د.ع`
+            itemText += `\n   الكمية: ${item.quantity} × ${itemUnitPrice.toLocaleString()} د.ع = ${itemTotalPrice.toLocaleString()} د.ع`
             
             return itemText
         }).join('\n\n')
@@ -208,15 +223,11 @@ ${itemsList}
         // Create WhatsApp URL
         const whatsappUrl = `https://wa.me/${deliveryPhone}?text=${encodeURIComponent(message)}`
         
-        // Open WhatsApp
         window.open(whatsappUrl, '_blank')
         
-        // Clear cart after opening WhatsApp
         clearCart()
         setIsSubmitting(false)
         
-        // Optional: Show success message
-        alert("تم فتح واتساب لإرسال طلبك!")
     }
 
     // Handle input changes
