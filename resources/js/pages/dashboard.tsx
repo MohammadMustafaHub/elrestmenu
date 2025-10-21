@@ -324,21 +324,21 @@ export default function Dashboard() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                             <Button asChild className="w-full justify-start">
-                                <Link href="/catalog/products">
+                                <Link href="/dashboard/products">
                                     <Plus className="h-4 w-4 mr-2" />
                                     إضافة منتج جديد
                                 </Link>
                             </Button>
 
                             <Button asChild variant="outline" className="w-full justify-start">
-                                <Link href="/catalog/categories">
+                                <Link href="/dashboard/categories">
                                     <Plus className="h-4 w-4 mr-2" />
                                     إضافة فئة جديدة
                                 </Link>
                             </Button>
 
                             <Button asChild variant="outline" className="w-full justify-start">
-                                <Link href="/catalog/branches">
+                                <Link href="/dashboard/branches">
                                     <Plus className="h-4 w-4 mr-2" />
                                     إدارة الفروع
                                 </Link>
