@@ -1,4 +1,3 @@
-import { usePage } from '@inertiajs/react';
 import { DashboardLayout } from '@/layouts/app/dashboard-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -36,44 +35,21 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
+
 } from '@/components/ui/alert-dialog';
-import { 
-    Crown, 
-    Calendar, 
-    Users, 
-    Package, 
-    Tags, 
-    Building2,
+import {
+    Crown,
+    Users,
+    Package,
     MoreHorizontal,
     TrendingUp,
     Clock,
     AlertTriangle
 } from 'lucide-react';
 import { useState } from 'react';
+import { Tenant } from '@/types';
 
-interface TenantLimits {
-    products: number;
-    categories: number;
-    branches: number;
-}
 
-interface TenantUsage {
-    products: number;
-    categories: number;
-    branches: number;
-}
-
-interface Tenant {
-    id: string;
-    name: string;
-    subscription: 'free' | 'pro' | 'premium';
-    subscription_ends_at: string;
-    created_at: string;
-    updated_at: string;
-    limits: TenantLimits;
-    usage: TenantUsage;
-}
 
 interface PaginatedData {
     data: Tenant[];
@@ -92,7 +68,7 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
     const [selectedPlan, setSelectedPlan] = useState<'pro' | 'premium'>('pro');
 
-    const getSubscriptionBadgeVariant = (subscription: string) => {
+    const getSubscriptionBadgeVariant = (subscription?: string) => {
         switch (subscription) {
             case 'free':
                 return 'secondary';
@@ -105,7 +81,7 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
         }
     };
 
-    const getSubscriptionIcon = (subscription: string) => {
+    const getSubscriptionIcon = (subscription?: string) => {
         switch (subscription) {
             case 'premium':
                 return <Crown className="h-3 w-3" />;
@@ -114,7 +90,7 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
         }
     };
 
-    const getSubscriptionDisplayName = (subscription: string) => {
+    const getSubscriptionDisplayName = (subscription?: string) => {
         switch (subscription) {
             case 'free':
                 return 'مجاني';
@@ -123,7 +99,7 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
             case 'premium':
                 return 'متميز';
             default:
-                return subscription;
+                return subscription || 'غير محدد';
         }
     };
 
@@ -131,7 +107,8 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
         return Math.min((used / limit) * 100, 100);
     };
 
-    const formatDate = (dateString: string) => {
+    const formatDate = (dateString: string | null) => {
+        if (!dateString) return 'غير محدد';
         return new Date(dateString).toLocaleDateString('ar-SA', {
             year: 'numeric',
             month: 'short',
@@ -139,11 +116,13 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
         });
     };
 
-    const isSubscriptionExpired = (endDate: string) => {
+    const isSubscriptionExpired = (endDate: string | null) => {
+        if (!endDate) return false;
         return new Date(endDate) < new Date();
     };
 
-    const getDaysUntilExpiry = (endDate: string) => {
+    const getDaysUntilExpiry = (endDate: string | null) => {
+        if (!endDate) return 0;
         const today = new Date();
         const expiryDate = new Date(endDate);
         const diffTime = expiryDate.getTime() - today.getTime();
@@ -180,16 +159,16 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
         return 'normal';
     };
 
-    const getProgressBarColor = (status: string) => {
-        switch (status) {
-            case 'danger':
-                return 'bg-red-500';
-            case 'warning':
-                return 'bg-yellow-500';
-            default:
-                return 'bg-green-500';
-        }
-    };
+    // const getProgressBarColor = (status: string) => {
+    //     switch (status) {
+    //         case 'danger':
+    //             return 'bg-red-500';
+    //         case 'warning':
+    //             return 'bg-yellow-500';
+    //         default:
+    //             return 'bg-green-500';
+    //     }
+    // };
 
     return (
         <DashboardLayout>
@@ -286,14 +265,14 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-col gap-1">
-                                                <Badge 
+                                                <Badge
                                                     variant={getSubscriptionBadgeVariant(tenant.subscription)}
                                                     className="flex items-center gap-1 w-fit"
                                                 >
                                                     {getSubscriptionIcon(tenant.subscription)}
                                                     {getSubscriptionDisplayName(tenant.subscription)}
                                                 </Badge>
-                                                {isSubscriptionExpired(tenant.subscription_ends_at) && (
+                                                {tenant.subscription_ends_at && isSubscriptionExpired(tenant.subscription_ends_at) && (
                                                     <Badge variant="destructive" className="flex items-center gap-1 w-fit">
                                                         <Clock className="h-3 w-3" />
                                                         منتهي
@@ -303,11 +282,13 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-col">
-                                                <span className="text-sm">{formatDate(tenant.subscription_ends_at)}</span>
+                                                <span className="text-sm">{formatDate(tenant.subscription_ends_at || "")}</span>
                                                 <span className="text-xs text-muted-foreground">
-                                                    {isSubscriptionExpired(tenant.subscription_ends_at) 
-                                                        ? 'منتهي الصلاحية'
-                                                        : `${getDaysUntilExpiry(tenant.subscription_ends_at)} يوم متبقي`
+                                                    {!tenant.subscription_ends_at
+                                                        ? 'غير محدد'
+                                                        : isSubscriptionExpired(tenant.subscription_ends_at)
+                                                            ? 'منتهي الصلاحية'
+                                                            : `${getDaysUntilExpiry(tenant.subscription_ends_at)} يوم متبقي`
                                                     }
                                                 </span>
                                             </div>
@@ -320,8 +301,8 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                                                         {Math.round(calculateUsagePercentage(tenant.usage.products, tenant.limits.products))}%
                                                     </span>
                                                 </div>
-                                                <Progress 
-                                                    value={calculateUsagePercentage(tenant.usage.products, tenant.limits.products)} 
+                                                <Progress
+                                                    value={calculateUsagePercentage(tenant.usage.products, tenant.limits.products)}
                                                     className="h-1.5"
                                                 />
                                                 {getUsageStatus(tenant.usage.products, tenant.limits.products) === 'danger' && (
@@ -337,8 +318,8 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                                                         {Math.round(calculateUsagePercentage(tenant.usage.categories, tenant.limits.categories))}%
                                                     </span>
                                                 </div>
-                                                <Progress 
-                                                    value={calculateUsagePercentage(tenant.usage.categories, tenant.limits.categories)} 
+                                                <Progress
+                                                    value={calculateUsagePercentage(tenant.usage.categories, tenant.limits.categories)}
                                                     className="h-1.5"
                                                 />
                                                 {getUsageStatus(tenant.usage.categories, tenant.limits.categories) === 'danger' && (
@@ -354,8 +335,8 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                                                         {Math.round(calculateUsagePercentage(tenant.usage.branches, tenant.limits.branches))}%
                                                     </span>
                                                 </div>
-                                                <Progress 
-                                                    value={calculateUsagePercentage(tenant.usage.branches, tenant.limits.branches)} 
+                                                <Progress
+                                                    value={calculateUsagePercentage(tenant.usage.branches, tenant.limits.branches)}
                                                     className="h-1.5"
                                                 />
                                                 {getUsageStatus(tenant.usage.branches, tenant.limits.branches) === 'danger' && (
@@ -375,7 +356,7 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                                                     <DropdownMenuLabel>الإجراءات</DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
                                                     {tenant.subscription !== 'pro' && (
-                                                        <DropdownMenuItem 
+                                                        <DropdownMenuItem
                                                             onClick={() => openUpgradeModal(tenant, 'pro')}
                                                         >
                                                             <TrendingUp className="h-4 w-4 ml-2" />
@@ -383,7 +364,7 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                                                         </DropdownMenuItem>
                                                     )}
                                                     {tenant.subscription !== 'premium' && (
-                                                        <DropdownMenuItem 
+                                                        <DropdownMenuItem
                                                             onClick={() => openUpgradeModal(tenant, 'premium')}
                                                         >
                                                             <Crown className="h-4 w-4 ml-2" />
@@ -406,7 +387,7 @@ export default function TenantsManagement({ data }: ManagementPageProps) {
                         <AlertDialogHeader>
                             <AlertDialogTitle>تأكيد ترقية الاشتراك</AlertDialogTitle>
                             <AlertDialogDescription>
-                                هل أنت متأكد من ترقية اشتراك مطعم "{selectedTenant?.name}" إلى 
+                                هل أنت متأكد من ترقية اشتراك مطعم "{selectedTenant?.name}" إلى
                                 {selectedPlan === 'pro' ? ' الخطة الاحترافية' : ' الخطة المتميزة'}؟
                                 <br /><br />
                                 سيتم تحديث حدود الاستخدام وتاريخ انتهاء الاشتراك تلقائياً.
