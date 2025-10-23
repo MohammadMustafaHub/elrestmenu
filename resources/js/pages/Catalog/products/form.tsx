@@ -427,104 +427,12 @@ export default function ProductsForm({
                                 </CardContent>
                             </Card>
 
-                            {/* Addons */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>الإضافات</CardTitle>
-                                    <CardDescription>
-                                        إضافات اختيارية يمكن للعملاء طلبها مع
-                                        المنتج
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    {addons.map((addon, index) => (
-                                        <div
-                                            key={index}
-                                            className="space-y-4 rounded-lg border p-4"
-                                        >
-                                            <div className="flex items-center justify-between">
-                                                <Label className="text-base font-semibold">
-                                                    إضافة #{index + 1}
-                                                </Label>
-                                                {addons.length > 1 && (
-                                                    <Button
-                                                        type="button"
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            removeAddon(index)
-                                                        }
-                                                        className="text-red-500 hover:text-red-700"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                )}
-                                            </div>
-
-                                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                                <div className="grid gap-2">
-                                                    <Label>اسم الإضافة</Label>
-                                                    <Input
-                                                        value={addon.name}
-                                                        onChange={(e) =>
-                                                            updateAddon(
-                                                                index,
-                                                                'name',
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="مثل: جبنة إضافية"
-                                                        className="text-right"
-                                                    />
-                                                </div>
-                                                <div className="grid gap-2">
-                                                    <Label>السعر</Label>
-                                                    <div className="relative">
-                                                        <Input
-                                                            type="number"
-
-                                                            min="0"
-                                                            value={addon.price}
-                                                            onChange={(e) =>
-                                                                updateAddon(
-                                                                    index,
-                                                                    'price',
-                                                                    Number(
-                                                                        e.target
-                                                                            .value,
-                                                                    ),
-                                                                )
-                                                            }
-                                                            placeholder="0.00"
-                                                            className="pl-12 text-right"
-                                                        />
-                                                        <span className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-muted-foreground">
-                                                            دينار
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        onClick={addAddon}
-                                        className="flex w-full items-center gap-2"
-                                    >
-                                        <Plus className="h-4 w-4" />
-                                        إضافة إضافة جديدة
-                                    </Button>
-                                </CardContent>
-                            </Card>
-
                             {/* Options */}
                             <Card>
                                 <CardHeader>
                                     <CardTitle>الخيارات</CardTitle>
                                     <CardDescription>
-                                        خيارات مختلفة للمنتج مثل الحجم أو النوع
+                                        خيارات مختلفة للمنتج مثل الحجم أو النوع. يمكن للعميل اختيار خيار واحد فقط وسيضاف سعر الخيار المحدد إلى السعر الأساسي.
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
@@ -554,45 +462,50 @@ export default function ProductsForm({
                                                 )}
                                             </div>
 
-                                            <div className="grid gap-2">
-                                                <Label>اسم الخيار</Label>
-                                                <Input
-                                                    value={option.name}
-                                                    onChange={(e) =>
-                                                        updateOption(
-                                                            optionIndex,
-                                                            'name',
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                    placeholder="مثل: الحجم"
-                                                    className="text-right"
-                                                />
-                                            </div>
-
-                                            <div className="grid gap-2">
-                                                <Label>السعر</Label>
-                                                <div className="relative">
+                                            <div className="space-y-4">
+                                                <div className="grid gap-2">
+                                                    <Label>اسم الخيار</Label>
                                                     <Input
-                                                        type="number"
-                                                        min="0"
-                                                        value={option.price}
+                                                        value={option.name}
                                                         onChange={(e) =>
                                                             updateOption(
                                                                 optionIndex,
-                                                                'price',
-                                                                Number(
-                                                                    e.target
-                                                                        .value,
-                                                                ),
+                                                                'name',
+                                                                e.target.value,
                                                             )
                                                         }
-                                                        placeholder="0.00"
-                                                        className="pl-12 text-right"
+                                                        placeholder="مثل: حجم كبير"
+                                                        className="text-right"
                                                     />
-                                                    <span className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-muted-foreground">
-                                                        دينار
-                                                    </span>
+                                                </div>
+
+                                                <div className="grid gap-2">
+                                                    <Label>السعر الإضافي</Label>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        سيتم إضافة هذا المبلغ إلى السعر الأساسي عند اختيار هذا الخيار
+                                                    </p>
+                                                    <div className="relative">
+                                                        <Input
+                                                            type="number"
+                                                            min="0"
+                                                            value={option.price}
+                                                            onChange={(e) =>
+                                                                updateOption(
+                                                                    optionIndex,
+                                                                    'price',
+                                                                    Number(
+                                                                        e.target
+                                                                            .value,
+                                                                    ),
+                                                                )
+                                                            }
+                                                            placeholder="0"
+                                                            className="pl-12 text-right"
+                                                        />
+                                                        <span className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-muted-foreground">
+                                                            دينار
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -606,6 +519,99 @@ export default function ProductsForm({
                                     >
                                         <Plus className="h-4 w-4" />
                                         إضافة خيار جديد
+                                    </Button>
+                                </CardContent>
+                            </Card>
+
+                            {/* Addons */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>الإضافات</CardTitle>
+                                    <CardDescription>
+                                        إضافات اختيارية يمكن للعملاء اختيارها مع المنتج. يمكن للعميل اختيار عدة إضافات وسيتم إضافة سعر كل إضافة مختارة إلى السعر النهائي.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    {addons.map((addon, index) => (
+                                        <div
+                                            key={index}
+                                            className="space-y-4 rounded-lg border p-4"
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <Label className="text-base font-semibold">
+                                                    إضافة #{index + 1}
+                                                </Label>
+                                                {addons.length > 1 && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            removeAddon(index)
+                                                        }
+                                                        className="text-red-500 hover:text-red-700"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <div className="grid gap-2">
+                                                    <Label>اسم الإضافة</Label>
+                                                    <Input
+                                                        value={addon.name}
+                                                        onChange={(e) =>
+                                                            updateAddon(
+                                                                index,
+                                                                'name',
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                        placeholder="مثل: جبنة إضافية"
+                                                        className="text-right"
+                                                    />
+                                                </div>
+                                                <div className="grid gap-2">
+                                                    <Label>السعر الإضافي</Label>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        سيتم إضافة هذا المبلغ إلى السعر النهائي عند اختيار هذه الإضافة
+                                                    </p>
+                                                    <div className="relative">
+                                                        <Input
+                                                            type="number"
+                                                            min="0"
+                                                            value={addon.price}
+                                                            onChange={(e) =>
+                                                                updateAddon(
+                                                                    index,
+                                                                    'price',
+                                                                    Number(
+                                                                        e.target
+                                                                            .value,
+                                                                    ),
+                                                                )
+                                                            }
+                                                            placeholder="0"
+                                                            className="pl-12 text-right"
+                                                        />
+                                                        <span className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-muted-foreground">
+                                                            دينار
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={addAddon}
+                                        className="flex w-full items-center gap-2"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                        إضافة إضافة جديدة
                                     </Button>
                                 </CardContent>
                             </Card>
