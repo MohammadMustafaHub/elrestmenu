@@ -20,6 +20,25 @@ export default function ProductAddonModal({ isOpen, onClose, product, onAddToCar
 
     const isDeliveryAllowed = tenant?.delivery_settings?.allow_delivery ?? false
 
+    // Check if restaurant is within working hours
+    const isWithinWorkingHours = () => {
+        if (!tenant?.settings?.working_starts || !tenant?.settings?.working_ends || !tenant?.settings?.working_days) {
+            return false
+        }
+
+        const now = new Date()
+        const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
+        const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
+
+        // Check if current day is a working day
+        if (!tenant.settings.working_days.includes(currentDay)) {
+            return false
+        }
+
+        // Check if current time is within working hours
+        return currentTime >= tenant.settings.working_starts && currentTime <= tenant.settings.working_ends
+    }
+
     useEffect(() => {
         if (isOpen) {
             setSelectedAddons(new Set())
@@ -107,7 +126,7 @@ export default function ProductAddonModal({ isOpen, onClose, product, onAddToCar
                                         <div className="font-medium">{option.name}</div>
                                         <div className="text-sm text-orange-600">+{option.price} د.ع</div>
                                     </div>
-                                    {isDeliveryAllowed && (
+                                    {isDeliveryAllowed && isWithinWorkingHours() && (
                                         <button
                                             onClick={() => toggleOption(option.name)}
                                             className={`px-3 py-1 rounded-lg text-sm transition-colors ${
@@ -126,7 +145,7 @@ export default function ProductAddonModal({ isOpen, onClose, product, onAddToCar
                 )}
 
                 {/* Quantity Selector */}
-                {isDeliveryAllowed && (
+                {isDeliveryAllowed && isWithinWorkingHours() && (
                     <div className="px-4 mb-4">
                         <h4 className="font-bold mb-2">الكمية</h4>
                         <div className="flex items-center justify-center bg-gray-50 rounded-lg p-2 w-32">
@@ -158,7 +177,7 @@ export default function ProductAddonModal({ isOpen, onClose, product, onAddToCar
                                         <div className="font-medium">{addon.name}</div>
                                         <div className="text-sm text-orange-600">{addon.price} د.ع</div>
                                     </div>
-                                    {isDeliveryAllowed && (
+                                    {isDeliveryAllowed && isWithinWorkingHours() && (
                                         <button
                                             onClick={() => toggleAddon(addon.name)}
                                             className={`px-3 py-1 rounded-lg text-sm transition-colors ${
@@ -177,7 +196,7 @@ export default function ProductAddonModal({ isOpen, onClose, product, onAddToCar
                 )}
 
                 {/* Add to Cart */}
-                {isDeliveryAllowed && (
+                {isDeliveryAllowed && isWithinWorkingHours() && (
                     <div className="sticky bottom-0 bg-white border-t p-4">
                         <button
                             onClick={handleAddToCart}
@@ -185,6 +204,15 @@ export default function ProductAddonModal({ isOpen, onClose, product, onAddToCar
                         >
                             إضافة للسلة - {calculateTotalPrice().toLocaleString()} د.ع
                         </button>
+                    </div>
+                )}
+
+                {/* Closed message */}
+                {(!isDeliveryAllowed || !isWithinWorkingHours()) && (
+                    <div className="sticky bottom-0 bg-white border-t p-4">
+                        <div className="w-full bg-gray-100 text-gray-600 py-3 rounded-lg font-bold text-center">
+                            {!isDeliveryAllowed ? 'الطلبات غير متاحة حالياً' : 'المطعم مغلق خارج ساعات العمل'}
+                        </div>
                     </div>
                 )}
             </div>

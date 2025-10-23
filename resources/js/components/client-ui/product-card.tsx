@@ -18,6 +18,25 @@ export default function ProductCard({ product }: ProductCardProps) {
     const { selectedBranch } = useBranchStore()
     const { tenant } = useTenantStore()
 
+    // Check if restaurant is within working hours
+    const isWithinWorkingHours = () => {
+        if (!tenant?.settings?.working_starts || !tenant?.settings?.working_ends || !tenant?.settings?.working_days) {
+            return false
+        }
+
+        const now = new Date()
+        const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
+        const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
+
+        // Check if current day is a working day
+        if (!tenant.settings.working_days.includes(currentDay)) {
+            return false
+        }
+
+        // Check if current time is within working hours
+        return currentTime >= tenant.settings.working_starts && currentTime <= tenant.settings.working_ends
+    }
+
     const isUnavailable = !product.is_active ||
         (selectedBranch ? product.branches_unavailable.includes(selectedBranch.id.toString()) : false)
 
@@ -87,7 +106,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                     {/* Button */}
                     <div>
-                        {isDeliveryAllowed ? (
+                        {isDeliveryAllowed && isWithinWorkingHours() ? (
                             <button
                                 className={`w-full py-2 rounded-lg flex items-center justify-center gap-2 transition-colors ${
                                     isUnavailable
@@ -106,7 +125,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                                 onClick={openAddonModal}
                             >
                                 <Plus className="w-4 h-4" />
-                                عرض التفاصيل
+                                {!isDeliveryAllowed ? 'عرض التفاصيل' : !isWithinWorkingHours() ? 'المطعم مغلق' : 'عرض التفاصيل'}
                             </button>
                         )}
                     </div>
