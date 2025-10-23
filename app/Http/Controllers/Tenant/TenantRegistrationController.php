@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
 use App\Models\Tenant;
+use App\Models\TenantSettings;
+use App\Models\TenantUsage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -38,6 +40,7 @@ class TenantRegistrationController extends Controller
             $t = new Tenant();
             $t->name = $validated['name'];
             $t->subscription = Subscription::Free;
+            $t->setTenantUsage(new TenantUsage());
             $t->subscripe(Subscription::Free);
             $t->save();
 

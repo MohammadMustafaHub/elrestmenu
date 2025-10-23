@@ -14,6 +14,11 @@ class SmsService
     {
         $otp = (string)random_int(100000, 999999);
 
+        if(app()->environment('local')){
+            $otp = 123456;
+            logger()->warning('Using local environment, OTP is set to 123456');
+        }
+
         if (VerificationCode::query()->where('phone', $phoneNumber)->exists()) {
             VerificationCode::query()->where('phone', $phoneNumber)->update([
                 'code' => $otp,
