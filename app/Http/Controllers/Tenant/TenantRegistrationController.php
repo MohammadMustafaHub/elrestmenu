@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
 use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\TenantSettings;
@@ -40,11 +41,17 @@ class TenantRegistrationController extends Controller
             $t = new Tenant();
             $t->name = $validated['name'];
             $t->subscription = Subscription::Free;
-            $t->setTenantUsage(new TenantUsage());
+            $t->setTenantUsage(new TenantUsage(branches: 1));
             $t->subscripe(Subscription::Free);
             $t->save();
 
             auth()->user()->update(['tenant_id' => $t->id]);
+
+            $branch = Branch::create([
+                'name' => 'الرايسي',
+                'address' => 'الموقع'
+            ]);
+
         });
 
         return redirect()->intended(route('dashboard', absolute: false));

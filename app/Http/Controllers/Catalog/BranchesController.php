@@ -105,10 +105,18 @@ class BranchesController extends Controller
     {
         $branch = Branch::findOrFail($id);
 
-        Db::transaction(function () use ($branch) {
-            $branch->delete();
+        $tenant = auth()->user()->Tenant;
 
-            $tenant = auth()->user()->Tenant;
+        if($tenant->usage['branches'] <= 1)
+        {
+            return redirect()->intended(route('branches.index', absolute: false))
+                ->with([
+                    'oneBranchRequired' => true
+                ]);
+        }
+
+        Db::transaction(function () use ($branch, $tenant) {
+            $branch->delete();
 
             $usage = $tenant->usage ?? [];
             $usage['branches'] = max(0, ($usage['branches'] ?? 1) - 1);

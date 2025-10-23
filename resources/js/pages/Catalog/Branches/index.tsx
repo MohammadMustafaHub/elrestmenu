@@ -1,5 +1,5 @@
 import { DashboardLayout } from '@/layouts/app/dashboard-layout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -36,26 +36,26 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import BranchesController from '@/actions/App/Http/Controllers/Catalog/BranchesController';
-import LimitModal from '@/components/limit-modal';
 import { useState } from 'react';
+import { Branch } from '@/types';
 
-interface Branch {
-    id: number;
-    name: string;
-    address: string;
-    phone?: string;
-    email?: string;
-    is_open: boolean;
-    created_at: string;
-    updated_at: string;
-}
 
-export default function Branches({ data }: { data: Branch[], limitError: boolean }) {
+
+export default function Branches({ data }: { data: Branch[]; }) {
     const handleDelete = (id: number) => {
+        if(data.length === 1){
+            setErrorModal(true);
+            return
+        }
         router.delete(`/dashboard/branches/${id}`, {
             preserveScroll: true,
         });
     };
+
+
+    const [errorModal, setErrorModal] = useState(false);
+
+
 
     return (
         <DashboardLayout>
@@ -204,6 +204,22 @@ export default function Branches({ data }: { data: Branch[], limitError: boolean
                     </CardContent>
                 </Card>
             </div>
+            <AlertDialog open={errorModal} onOpenChange={setErrorModal}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>خطأ في الحذف</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            يجب أن يكون هناك فرع واحد على الأقل للمطعم. لا يمكنك حذف هذا الفرع.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setErrorModal(false)}>
+                            فهمت
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
         </DashboardLayout>
     );
 }

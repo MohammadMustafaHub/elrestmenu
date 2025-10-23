@@ -116,11 +116,12 @@ export interface Category {
 }
 
 export interface Branch {
-    id: number
-    name: string
-    address: string
-    phone: string
-    is_open: boolean
+    id: number;
+    name: string;
+    address: string;
+    phone: string;
+    email: string;
+    is_open: boolean;
 }
 
 

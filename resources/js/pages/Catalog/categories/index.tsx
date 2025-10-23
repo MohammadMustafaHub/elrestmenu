@@ -105,7 +105,6 @@ export default function Categories({ data }: { data: PaginatedData }) {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className="text-right">اسم الفئة</TableHead>
-                                        <TableHead className="text-right">تاريخ الإنشاء</TableHead>
                                         <TableHead className="text-right">الإجراءات</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -117,9 +116,6 @@ export default function Categories({ data }: { data: PaginatedData }) {
                                                     <Tags className="h-4 w-4 mr-2 text-muted-foreground" />
                                                     {category.name}
                                                 </div>
-                                            </TableCell>
-                                            <TableCell className="text-right text-muted-foreground">
-                                                {new Date(category.created_at).toLocaleDateString('ar-SA')}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-start">

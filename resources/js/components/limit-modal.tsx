@@ -30,7 +30,7 @@ export default function LimitModal({ isOpen, onClose }: { isOpen: boolean, onClo
                         إلغاء
                     </Button>
                     <Button asChild>
-                        <Link href="/subscription">
+                        <Link href="/dashboard/subscription">
                             <Crown className="w-4 h-4 ml-2" />
                             ترقية الاشتراك
                         </Link>
