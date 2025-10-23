@@ -20,6 +20,12 @@ export default function RegisterTenant() {
                 {...TenantRegistrationController.store()}
                 disableWhileProcessing
                 className="flex flex-col gap-6"
+                transform={(formData) => {
+                    return {
+                        ...formData,
+                        name: (formData.name as string).toLowerCase()
+                    }
+                }}
             >
                 {({ processing, errors }) => (
                     <>

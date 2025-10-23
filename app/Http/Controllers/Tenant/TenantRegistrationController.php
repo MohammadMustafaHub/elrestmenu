@@ -28,7 +28,7 @@ class TenantRegistrationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'unique:tenants,name|string|max:255|regex:/^(?!-)[A-Za-z0-9-]{1,63}(?<!-)$/',
+            'name' => 'unique:tenants,name|string|max:255|regex:/^(?!-)[a-z0-9-]{1,63}(?<!-)$/',
         ]);
 
         if(Tenant::isReservedName($validated['name'])) {
@@ -39,7 +39,7 @@ class TenantRegistrationController extends Controller
 
         DB::transaction(function () use ($validated) {
             $t = new Tenant();
-            $t->name = $validated['name'];
+            $t->name = Str::lower($validated['name']);
             $t->subscription = Subscription::Free;
             $t->setTenantUsage(new TenantUsage(branches: 1));
             $t->subscripe(Subscription::Free);
