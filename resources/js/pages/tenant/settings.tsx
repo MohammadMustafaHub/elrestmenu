@@ -178,7 +178,7 @@ export default function TenantSettings({ settings }: SettingsPageProps) {
                                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div className="grid gap-2">
                                             <Label htmlFor="working_starts">
-                                                وقت البداية{' '}
+                                                وقت البداية (صباحاً){' '}
                                                 <span className="text-red-500">
                                                     *
                                                 </span>
@@ -187,9 +187,14 @@ export default function TenantSettings({ settings }: SettingsPageProps) {
                                                 id="working_starts"
                                                 name="working_starts"
                                                 type="time"
+                                                min="00:00"
+                                                max="11:59"
                                                 defaultValue={settings?.working_starts}
                                                 required
                                             />
+                                            <p className="text-xs text-muted-foreground">
+                                                يجب أن يكون الوقت في فترة الصباح (12:00 ص - 11:59 ص)
+                                            </p>
                                             <InputError
                                                 message={errors.working_starts}
                                             />
@@ -197,19 +202,23 @@ export default function TenantSettings({ settings }: SettingsPageProps) {
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="working_ends">
-                                                وقت النهاية{' '}
+                                                وقت النهاية (مساءً){' '}
                                                 <span className="text-red-500">
                                                     *
                                                 </span>
                                             </Label>
                                             <Input
-
                                                 id="working_ends"
                                                 name="working_ends"
                                                 type="time"
+                                                min="12:00"
+                                                max="23:59"
                                                 defaultValue={settings?.working_ends}
                                                 required
                                             />
+                                            <p className="text-xs text-muted-foreground">
+                                                يجب أن يكون الوقت في فترة المساء (12:00 م - 11:59 م)
+                                            </p>
                                             <InputError
                                                 message={errors.working_ends}
                                             />
