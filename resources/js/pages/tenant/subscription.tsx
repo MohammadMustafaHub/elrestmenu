@@ -29,23 +29,23 @@ const WHATSAPP_NUMBER = "9647820157415"; // Replace with your actual WhatsApp su
 
 const planFeatures = {
     free: [
-        "5 أيام تجريبية",
-        "حتى 200 منتج",
-        "حتى 50 فئة",
+        "3 أيام تجريبية",
+        "حتى 50 منتج",
+        "حتى 15 فئة",
         "فرع واحد فقط",
         "دعم أساسي"
     ],
     pro: [
         "سنة كاملة",
-        "حتى 200 منتج", 
-        "حتى 50 فئة",
+        "حتى 50 منتج", 
+        "حتى 15 فئة",
         "فرع واحد فقط",
         "دعم متقدم"
     ],
     premium: [
         "سنة كاملة",
         "حتى 10,000 منتج",
-        "حتى 2,000 فئة", 
+        "حتى 200 فئة", 
         "حتى 50 فرع",
         "دعم مخصص"
     ]
@@ -53,8 +53,8 @@ const planFeatures = {
 
 const planPrices = {
     free: "مجاني",
-    pro: "150,000IQD/السنة",
-    premium: "300,000IQD/السنة"
+    pro: "200,000IQD/السنة",
+    premium: "350,000IQD/السنة"
 };
 
 export default function Subscription() {
@@ -252,43 +252,9 @@ export default function Subscription() {
                             </p>
                         </div>
 
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {/* Free Plan */}
-                            {(tenant?.subscription as string) !== 'free' && (
-                                <Card className="relative">
-                                    <CardHeader>
-                                        <div className="flex items-center justify-between">
-                                            <CardTitle>الخطة المجانية</CardTitle>
-                                            <Badge variant="secondary">مجاني</Badge>
-                                        </div>
-                                        <CardDescription>
-                                            <span className="text-2xl font-bold">{planPrices.free}</span>
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <ul className="space-y-2">
-                                            {planFeatures.free.map((feature, index) => (
-                                                <li key={index} className="flex items-center gap-2">
-                                                    <CheckCircle className="h-4 w-4 text-green-500" />
-                                                    <span className="text-sm">{feature}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        <Button
-                                            variant="outline"
-                                            className="w-full"
-                                            onClick={() => handleWhatsAppContact('free')}
-                                        >
-                                            <MessageCircle className="h-4 w-4 mr-2" />
-                                            تواصل معنا
-                                            <ExternalLink className="h-3 w-3 mr-1" />
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            )}
-
+                        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
                             {/* Pro Plan */}
-                            {(tenant?.subscription as string) !== 'pro' && (
+                            {(tenant?.subscription as string) === 'free' && (
                                 <Card className="relative">
                                     <CardHeader>
                                         <div className="flex items-center justify-between">
@@ -321,37 +287,32 @@ export default function Subscription() {
                             )}
 
                             {/* Premium Plan */}
-                            <Card className="relative border-yellow-200 bg-yellow-50">
-                                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                    <Badge className="bg-yellow-500 text-white">الأكثر شعبية</Badge>
-                                </div>
-                                <CardHeader>
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="flex items-center gap-2">
-                                            <Crown className="h-5 w-5 text-yellow-500" />
-                                            الخطة المتميزة
-                                        </CardTitle>
-                                        <Badge className="bg-yellow-500">متميز</Badge>
+                            {(tenant?.subscription as string) !== 'premium' && (
+                                <Card className="relative border-yellow-200 bg-yellow-50">
+                                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                        <Badge className="bg-yellow-500 text-white">الأكثر شعبية</Badge>
                                     </div>
-                                    <CardDescription>
-                                        <span className="text-2xl font-bold">{planPrices.premium}</span>
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <ul className="space-y-2">
-                                        {planFeatures.premium.map((feature, index) => (
-                                            <li key={index} className="flex items-center gap-2">
-                                                <CheckCircle className="h-4 w-4 text-green-500" />
-                                                <span className="text-sm">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    {(tenant?.subscription as string) === 'premium' ? (
-                                        <Button variant="outline" className="w-full" disabled>
-                                            <CheckCircle className="h-4 w-4 mr-2" />
-                                            الخطة الحالية
-                                        </Button>
-                                    ) : (
+                                    <CardHeader>
+                                        <div className="flex items-center justify-between">
+                                            <CardTitle className="flex items-center gap-2">
+                                                <Crown className="h-5 w-5 text-yellow-500" />
+                                                الخطة المتميزة
+                                            </CardTitle>
+                                            <Badge className="bg-yellow-500">متميز</Badge>
+                                        </div>
+                                        <CardDescription>
+                                            <span className="text-2xl font-bold">{planPrices.premium}</span>
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                        <ul className="space-y-2">
+                                            {planFeatures.premium.map((feature, index) => (
+                                                <li key={index} className="flex items-center gap-2">
+                                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                                    <span className="text-sm">{feature}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
                                         <Button
                                             className="w-full bg-yellow-500 hover:bg-yellow-600"
                                             onClick={() => handleWhatsAppContact('premium')}
@@ -360,9 +321,9 @@ export default function Subscription() {
                                             ترقية الآن
                                             <ExternalLink className="h-3 w-3 mr-1" />
                                         </Button>
-                                    )}
-                                </CardContent>
-                            </Card>
+                                    </CardContent>
+                                </Card>
+                            )}
                         </div>
                     </div>
                 )}

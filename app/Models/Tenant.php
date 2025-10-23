@@ -38,8 +38,8 @@ class Tenant extends Model
     {
         $limits = match ($subscription) {
             Subscription::Free, Subscription::Pro => [
-                'products' => 200,
-                'categories' => 50,
+                'products' => 50,
+                'categories' => 15,
                 'branches' => 1,
             ],
             Subscription::Premium => [

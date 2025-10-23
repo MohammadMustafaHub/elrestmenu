@@ -357,13 +357,13 @@
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            حتى 200 منتج
+                            حتى 50 منتج
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            حتى 50 فئة
+                            حتى 15 فئة
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
@@ -390,7 +390,7 @@
                     </div>
                     <div class="text-center">
                         <h3 class="text-2xl font-bold text-gray-900 mb-4">احترافي</h3>
-                        <div class="text-4xl font-bold text-gray-900 mb-2">150,000 د.ع</div>
+                        <div class="text-4xl font-bold text-gray-900 mb-2">200,000 د.ع</div>
                         <p class="text-gray-600 mb-6">سنوياً</p>
                     </div>
                     <ul class="space-y-4 mb-8">
@@ -398,13 +398,13 @@
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            حتى 200 منتج
+                            حتى 50 منتج
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            حتى 50 فئة
+                            حتى 15 فئة
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
@@ -428,7 +428,7 @@
                 <div class="bg-white p-8 rounded-xl shadow-lg">
                     <div class="text-center">
                         <h3 class="text-2xl font-bold text-gray-900 mb-4">متميز</h3>
-                        <div class="text-4xl font-bold text-gray-900 mb-2">300,000 د.ع</div>
+                        <div class="text-4xl font-bold text-gray-900 mb-2">350,000 د.ع</div>
                         <p class="text-gray-600 mb-6">سنوياً</p>
                     </div>
                     <ul class="space-y-4 mb-8">
@@ -442,7 +442,7 @@
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            حتى 2,000 فئة
+                            حتى 200 فئة
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
